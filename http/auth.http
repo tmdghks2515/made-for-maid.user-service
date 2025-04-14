@@ -1,0 +1,19 @@
+### 카카오 로그인/회원가입
+POST http://localhost:8082/api/auth/signin/user/kakao
+Content-Type: application/json
+
+{
+  "oauthCode": "asfADjfa",
+  "email": "tmdghks2515@naver.com",
+  "oauthId": "aS2as4fF"
+}
+
+### 사용자 생성
+POST http://localhost:8082/api/auth/user
+Content-Type: application/json
+
+{
+  "accountId": "tNyKSNixSEi",
+  "nickname": "임아난",
+  "maidCafeId": "1"
+}

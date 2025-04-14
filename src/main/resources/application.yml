@@ -25,3 +25,9 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
+
+jwt:
+  secret: ${JWT_SECRET}
+
+system:
+  secret: ${SYSTEM_SECRET}
