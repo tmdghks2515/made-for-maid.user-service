@@ -1,6 +1,6 @@
-package io.madeformaid.user.user.dto.command
+package io.madeformaid.user.admin.dto.command
 
-data class CreateMaidCafeAdminCommand(
+data class CreateMaidCommand(
         val accountId: String,
         val nickname: String,
         val maidCafeId: String

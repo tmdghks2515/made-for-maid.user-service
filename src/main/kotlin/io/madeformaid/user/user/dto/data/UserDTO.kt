@@ -5,5 +5,6 @@ data class UserDTO(
         val accountId: String,
         val email: String,
         val nickname: String,
-        val currentMaidCafeId: String,
+        val maidCafeId: String,
+        val profileImageUrl: String?,
 )

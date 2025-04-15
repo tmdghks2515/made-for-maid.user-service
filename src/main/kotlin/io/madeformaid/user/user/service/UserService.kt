@@ -1,6 +1,7 @@
 package io.madeformaid.user.user.service
 
 import io.madeformaid.user.user.dto.command.CreateUserCommand
+import io.madeformaid.user.user.dto.data.CreateUserResDTO
 import io.madeformaid.user.user.dto.data.UserDTO
 import io.madeformaid.user.user.entity.UserEntity
 import io.madeformaid.user.user.mapper.UserMapper
@@ -18,7 +19,7 @@ class UserService(
         private val userMapper: UserMapper,
         private val jwtTokenProvider: JwtTokenProvider
 ) {
-    fun createUser(command: CreateUserCommand): Pair<String, String> {
+    fun createUser(command: CreateUserCommand): Pair<CreateUserResDTO, String> {
         val account = accountRepository.findById(command.accountId)
                 .orElseThrow { IllegalArgumentException("Account not found") }
 
@@ -31,7 +32,9 @@ class UserService(
 
         val userDTO = userMapper.entityToDTO(userRepository.save(createdUser))
 
-        return jwtTokenProvider.createAccessToken(userDTO) to
-                jwtTokenProvider.createRefreshToken(userDTO.id)
+        return CreateUserResDTO(
+                user = userDTO,
+                accessToken = jwtTokenProvider.createAccessToken(userDTO),
+        ) to jwtTokenProvider.createRefreshToken(userDTO.id)
     }
 }

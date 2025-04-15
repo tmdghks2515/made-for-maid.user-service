@@ -1,5 +1,5 @@
 ### 카카오 로그인/회원가입
-POST http://localhost:8082/api/auth/signin/user/kakao
+POST http://localhost:8080/api/user/auth/signin/user/kakao
 Content-Type: application/json
 
 {
@@ -9,11 +9,20 @@ Content-Type: application/json
 }
 
 ### 사용자 생성
-POST http://localhost:8082/api/auth/user
+POST http://localhost:8080/api/user/auth/user
 Content-Type: application/json
 
 {
   "accountId": "tNyKSNixSEi",
   "nickname": "임아난",
   "maidCafeId": "1"
+}
+
+### 내부 관리자 생성
+POST http://localhost:8080/api/user/auth/admin/system
+Content-Type: application/json
+
+{
+  "accountId": "tNyKSNixSEi",
+  "nickname": "임아난"
 }

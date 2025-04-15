@@ -11,8 +11,9 @@ class UserMapper {
                 id = userEntity.id ?: throw IllegalArgumentException("User ID cannot be null"),
                 accountId = userEntity.account?.id ?: throw IllegalArgumentException("Account ID cannot be null"),
                 nickname = userEntity.nickname,
-                currentMaidCafeId = userEntity.maidCafeId,
+                maidCafeId = userEntity.maidCafeId,
                 email = userEntity.account?.email ?: throw IllegalArgumentException("Email cannot be null"),
+                profileImageUrl = userEntity.profileImageUrl,
         )
     }
 }

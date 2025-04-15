@@ -28,11 +28,11 @@ class AccountEntity(
         @Column(name = "oauth_id", length = 100, unique = true)
         var oauthId: String? = null,
 
-        @Column(name = "user_recent_maid_cafe_id", length = 100)
-        var userRecentMaidCafeId: String? = null,
+        @Column(name = "recent_user_id", length = 100)
+        var recentUserId: String? = null,
 
-        @Column(name = "admin_recent_maid_cafe_id", length = 100)
-        var adminRecentMaidCafeId: String? = null,
+        @Column(name = "recent_admin_id", length = 100)
+        var recentAdminId: String? = null,
 
         @Column(name = "is_active", nullable = false)
         var isActive: Boolean = true,
@@ -53,7 +53,7 @@ class AccountEntity(
                 users.add(user)
                 user.account = this
 
-                userRecentMaidCafeId = user.maidCafeId
+                recentUserId = user.id
         }
 
         fun addMaidCafeAdmin(admin: AdminEntity) {
@@ -64,7 +64,7 @@ class AccountEntity(
                 admins.add(admin)
                 admin.account = this
 
-                adminRecentMaidCafeId = admin.maidCafeId
+                recentAdminId = admin.id
         }
 
         fun addSystemAdmin(admin: AdminEntity) {
@@ -76,14 +76,23 @@ class AccountEntity(
                 admin.account = this
         }
 
-        fun getRecentSignedInUser(): UserEntity? =
-                userRecentMaidCafeId?.let { userRecentMaidCafeId ->
-                        users.find { it.maidCafeId == userRecentMaidCafeId }
+        fun addMaid(admin: AdminEntity) {
+                if (admins.any { it.maidCafeId == admin.maidCafeId && it.adminRole == AdminRole.MAID}) {
+                        throw IllegalArgumentException("동일한 카페에 이미 가입된 메이드 계정이 존재합니다.")
                 }
 
-        fun getRecentSignedInMaidCafeAdmin(): AdminEntity? =
-                adminRecentMaidCafeId?.let { adminRecentMaidCafeId ->
-                        admins.find { it.maidCafeId == adminRecentMaidCafeId && it.adminRole == AdminRole.MAID_CAFE_ADMIN }
+                admins.add(admin)
+                admin.account = this
+        }
+
+        fun getRecentSignedInUser(): UserEntity? =
+                recentUserId?.let { recentUserId ->
+                        users.find { it.id == recentUserId }
+                }
+
+        fun getRecentSignedInAdmin(): AdminEntity? =
+                recentAdminId?.let { recentAdminId ->
+                        admins.find { it.id == recentAdminId }
                 }
 
         fun getSystemAdmin(): AdminEntity? {
