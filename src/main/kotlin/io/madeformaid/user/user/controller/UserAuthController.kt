@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/user/auth/user")
+@RequestMapping("/api/user/auth")
 class UserAuthController(
         private val userAuthService: UserAuthService,
         private val userService: UserService,
@@ -35,9 +35,9 @@ class UserAuthController(
         return ResponseEntity.ok(signInResponse)
     }
 
-    @PostMapping("/user")
+    @PostMapping
     fun createUser(@RequestBody command: CreateUserCommand, response: HttpServletResponse): ResponseEntity<CreateUserResDTO> {
-        val (responseDTO, refreshToken) = userService.createUser(command)
+        val (responseDTO, refreshToken) = userAuthService.createUser(command)
 
         response.setHeader(
                 HttpHeaders.SET_COOKIE,

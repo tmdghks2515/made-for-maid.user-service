@@ -1,5 +1,5 @@
 ### 카카오 로그인/회원가입
-POST http://localhost:8080/api/user/auth/signin/user/kakao
+POST {{gatewayUrl}}/api/user/auth/signin/kakao
 Content-Type: application/json
 
 {
@@ -9,7 +9,7 @@ Content-Type: application/json
 }
 
 ### 사용자 생성
-POST http://localhost:8080/api/user/auth/user
+POST {{gatewayUrl}}/api/user/auth/user
 Content-Type: application/json
 
 {
