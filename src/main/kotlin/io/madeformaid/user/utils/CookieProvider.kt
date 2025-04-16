@@ -2,6 +2,7 @@ package io.madeformaid.user.utils
 
 import org.springframework.http.ResponseCookie
 import org.springframework.stereotype.Component
+import java.time.Duration
 
 @Component
 class CookieProvider {
@@ -11,7 +12,7 @@ class CookieProvider {
         return ResponseCookie.from(refreshTokenKey, refreshToken)
                 .httpOnly(true)
                 .secure(true)
-                .maxAge(7 * 24 * 60 * 60)
+                .maxAge(Duration.ofDays(180))
                 .sameSite("None")
                 .build()
     }

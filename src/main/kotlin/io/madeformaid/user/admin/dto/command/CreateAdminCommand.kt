@@ -1,7 +1,7 @@
 package io.madeformaid.user.admin.dto.command
 
-data class CreateMaidCommand(
+data class CreateAdminCommand(
         val accountId: String,
         val nickname: String,
-        val maidCafeId: String
+        val maidCafeId: String,
 )

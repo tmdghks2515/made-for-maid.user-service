@@ -7,6 +7,8 @@ import io.madeformaid.user.admin.dto.data.AdminDTO
 import io.madeformaid.user.user.dto.data.UserDTO
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import java.time.Duration
+import java.time.Instant
 import java.util.Date
 
 @Component
@@ -17,7 +19,7 @@ class JwtTokenProvider(
 
     fun createAccessToken(user: UserDTO): String {
         val now = Date()
-        val expiry = Date(now.time + 30 * 60 * 1000) // 30분
+        val expiry = Date.from(Instant.now().plus(Duration.ofMinutes(30)))
 
         return Jwts.builder()
                 .setSubject(user.id)
@@ -42,7 +44,7 @@ class JwtTokenProvider(
 
     fun createRefreshToken(userAdminId: String): String {
         val now = Date()
-        val expiry = Date(now.time + 7 * 24 * 60 * 60 * 1000) // 7일
+        val expiry = Date.from(Instant.now().plus(Duration.ofDays(180)))
 
         return Jwts.builder()
                 .setSubject(userAdminId)

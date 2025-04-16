@@ -5,6 +5,7 @@ import io.madeformaid.shared.jpa.entity.BaseEntity
 import io.madeformaid.shared.jpa.idGenerator.ShortId
 import io.madeformaid.shared.vo.enums.AdminRole
 import io.madeformaid.shared.vo.enums.OauthProvider
+import io.madeformaid.user.admin.entity.AdminEntity
 import jakarta.persistence.*
 import org.hibernate.annotations.Filter
 import org.hibernate.annotations.FilterDef
@@ -16,7 +17,7 @@ import org.hibernate.annotations.FilterDef
 class AccountEntity(
         @Id
         @ShortId
-        val id: String? = null,
+        var id: String? = null,
 
         @Column(name = "email", nullable = false, length = 100)
         var email: String,
@@ -56,15 +57,13 @@ class AccountEntity(
                 recentUserId = user.id
         }
 
-        fun addMaidCafeAdmin(admin: AdminEntity) {
-                if (admins.any { it.maidCafeId == admin.maidCafeId && it.adminRole == AdminRole.MAID_CAFE_ADMIN}) {
-                        throw IllegalArgumentException("동일한 카페에 이미 가입된 관리자 계정이 존재합니다.")
+        fun addMaidCafeOwner(admin: AdminEntity) {
+                if (admins.any { it.maidCafeId == admin.maidCafeId && it.adminRole == AdminRole.MAID_CAFE_OWNER}) {
+                        throw IllegalArgumentException("이미 가입된 사장님 계정이 존재합니다.")
                 }
 
                 admins.add(admin)
                 admin.account = this
-
-                recentAdminId = admin.id
         }
 
         fun addSystemAdmin(admin: AdminEntity) {
@@ -78,7 +77,16 @@ class AccountEntity(
 
         fun addMaid(admin: AdminEntity) {
                 if (admins.any { it.maidCafeId == admin.maidCafeId && it.adminRole == AdminRole.MAID}) {
-                        throw IllegalArgumentException("동일한 카페에 이미 가입된 메이드 계정이 존재합니다.")
+                        throw IllegalArgumentException("이미 가입된 메이드 계정이 존재합니다.")
+                }
+
+                admins.add(admin)
+                admin.account = this
+        }
+
+        fun addMaidCafeManager(admin: AdminEntity) {
+                if (admins.any { it.maidCafeId == admin.maidCafeId && it.adminRole == AdminRole.MAID_CAFE_MANAGER}) {
+                        throw IllegalArgumentException("이미 가입된 매니저 계정이 존재합니다.")
                 }
 
                 admins.add(admin)

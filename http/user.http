@@ -17,12 +17,3 @@ Content-Type: application/json
   "nickname": "임아난",
   "maidCafeId": "1"
 }
-
-### 내부 관리자 생성
-POST http://localhost:8080/api/user/auth/admin/system
-Content-Type: application/json
-
-{
-  "accountId": "tNyKSNixSEi",
-  "nickname": "임아난"
-}

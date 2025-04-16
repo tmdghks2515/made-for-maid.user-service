@@ -1,7 +1,7 @@
-package io.madeformaid.user.user.mapper
+package io.madeformaid.user.admin.mapper
 
 import io.madeformaid.user.admin.dto.data.AdminDTO
-import io.madeformaid.user.user.entity.AdminEntity
+import io.madeformaid.user.admin.entity.AdminEntity
 import org.springframework.stereotype.Component
 
 @Component

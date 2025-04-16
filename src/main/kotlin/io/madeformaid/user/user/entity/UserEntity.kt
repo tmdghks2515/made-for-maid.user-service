@@ -9,7 +9,7 @@ import jakarta.persistence.*
 class UserEntity(
         @Id
         @ShortId
-        val id: String? = null,
+        var id: String? = null,
 
         @Column(name = "nickname", nullable = false, length = 30)
         var nickname: String,
@@ -23,5 +23,4 @@ class UserEntity(
         @ManyToOne
         @JoinColumn(name = "account_id", nullable = false)
         var account: AccountEntity? = null,
-
 ) : BaseEntity()

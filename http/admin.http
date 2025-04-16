@@ -1,0 +1,49 @@
+### 관리자 로그인/회원가입 (카카오)
+POST {{gatewayUrl}}/api/user/auth/admin/signin/kakao
+Content-Type: application/json
+
+{
+  "oauthCode": "asfADjfa",
+  "email": "tmdghks2515@naver.com",
+  "oauthId": "aS2as4fF"
+}
+
+### System Admin 생성
+POST {{gatewayUrl}}/api/user/auth/admin/system
+Content-Type: application/json
+
+{
+  "accountId": "_T2VP5hLQ2u",
+  "nickname": "임아난 시스템 관리자",
+  "systemSecret": "{{systemSecret}}"
+}
+
+### MaidCafe Owner 생성
+POST {{gatewayUrl}}/api/user/auth/admin/owner
+Content-Type: application/json
+
+{
+  "accountId": "_T2VP5hLQ2u",
+  "nickname": "임아난 사장님",
+  "maidCafeId": "maidcafe_1"
+}
+
+### MaidCafe Manager 생성
+POST {{gatewayUrl}}/api/user/auth/admin/manager
+Content-Type: application/json
+
+{
+  "accountId": "_T2VP5hLQ2u",
+  "nickname": "임아난 매니저",
+  "maidCafeId": "maidcafe_1"
+}
+
+### Maid 생성
+POST {{gatewayUrl}}/api/user/auth/admin/maid
+Content-Type: application/json
+
+{
+  "accountId": "_T2VP5hLQ2u",
+  "nickname": "샤라쨩",
+  "maidCafeId": "maidcafe_1"
+}
