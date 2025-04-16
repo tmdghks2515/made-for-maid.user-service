@@ -1,4 +1,4 @@
-### 카카오 로그인/회원가입
+### 사용자 로그인 (카카오)
 POST {{gatewayUrl}}/api/user/auth/signin/kakao
 Content-Type: application/json
 
@@ -9,11 +9,11 @@ Content-Type: application/json
 }
 
 ### 사용자 생성
-POST {{gatewayUrl}}/api/user/auth/user
+POST {{gatewayUrl}}/api/user/auth
 Content-Type: application/json
 
 {
-  "accountId": "tNyKSNixSEi",
+  "accountId": "_T2VP5hLQ2u",
   "nickname": "임아난",
-  "maidCafeId": "1"
+  "maidCafeId": "maidcafe_2"
 }
