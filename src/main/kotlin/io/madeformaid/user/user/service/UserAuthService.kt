@@ -71,8 +71,10 @@ class UserAuthService(
         )
 
         account.addUser(createdUser)
+        val savedUser = userRepository.save(createdUser)
+        account.recentUserId = savedUser.id
 
-        val userDTO = userMapper.entityToDTO(userRepository.save(createdUser))
+        val userDTO = userMapper.entityToDTO(savedUser)
 
         return CreateUserResDTO(
                 user = userDTO,

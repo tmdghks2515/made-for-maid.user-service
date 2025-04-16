@@ -53,8 +53,6 @@ class AccountEntity(
 
                 users.add(user)
                 user.account = this
-
-                recentUserId = user.id
         }
 
         fun addMaidCafeOwner(admin: AdminEntity) {
