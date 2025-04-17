@@ -1,24 +1,26 @@
 package io.madeformaid.user.utils
 
+import io.madeformaid.shared.config.AuthProperties
 import org.springframework.http.ResponseCookie
 import org.springframework.stereotype.Component
+import java.security.AuthProvider
 import java.time.Duration
 
 @Component
-class CookieProvider {
-    val refreshTokenKey = "refreshToken"
-
+class CookieProvider(
+        private val authProperties: AuthProperties
+) {
     fun createRefreshTokenCookie(refreshToken: String): ResponseCookie {
-        return ResponseCookie.from(refreshTokenKey, refreshToken)
+        return ResponseCookie.from(authProperties.jwt.refreshTokenName, refreshToken)
                 .httpOnly(true)
                 .secure(true)
-                .maxAge(Duration.ofDays(180))
+                .maxAge(Duration.ofSeconds(authProperties.jwt.refreshTokenExpireTime))
                 .sameSite("None")
                 .build()
     }
 
     fun clearRefreshTokenCookie(): ResponseCookie {
-        return ResponseCookie.from(refreshTokenKey, "")
+        return ResponseCookie.from(authProperties.jwt.refreshTokenName, "")
                 .httpOnly(true)
                 .secure(true)
                 .maxAge(0)

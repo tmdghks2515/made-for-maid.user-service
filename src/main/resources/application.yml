@@ -3,7 +3,12 @@ server:
 
 spring:
   application:
-    name: made-for-maid.user-service
+    name: user-service
+  config:
+    import: "configserver:"
+  cloud:
+    config:
+      uri: http://localhost:8888
 
   datasource:
     url: jdbc:postgresql://localhost:5433/made-for-maid-local
@@ -25,9 +30,3 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
-
-jwt:
-  secret: ${JWT_SECRET}
-
-system:
-  secret: ${SYSTEM_SECRET}

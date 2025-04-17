@@ -3,6 +3,7 @@ package io.madeformaid.user.utils
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
+import io.madeformaid.shared.config.AuthProperties
 import io.madeformaid.user.admin.dto.data.AdminDTO
 import io.madeformaid.user.user.dto.data.UserDTO
 import org.springframework.beans.factory.annotation.Value
@@ -13,13 +14,13 @@ import java.util.Date
 
 @Component
 class JwtTokenProvider(
-    @Value("\${jwt.secret}") private val secretKey: String
+    private val authProperties: AuthProperties
 ) {
-    private val key = Keys.hmacShaKeyFor(secretKey.toByteArray())
+    private val key = Keys.hmacShaKeyFor(authProperties.jwt.secret.toByteArray())
 
     fun createAccessToken(user: UserDTO): String {
         val now = Date()
-        val expiry = Date.from(Instant.now().plus(Duration.ofMinutes(30)))
+        val expiry = Date(now.time + authProperties.jwt.accessTokenExpireTime)
 
         return Jwts.builder()
                 .setSubject(user.id)
@@ -31,7 +32,7 @@ class JwtTokenProvider(
 
     fun createAccessToken(admin: AdminDTO): String {
         val now = Date()
-        val expiry = Date(now.time + 30 * 60 * 1000) // 30분
+        val expiry = Date(now.time + authProperties.jwt.accessTokenExpireTime)
 
         return Jwts.builder()
                 .setSubject(admin.id)
@@ -44,7 +45,7 @@ class JwtTokenProvider(
 
     fun createRefreshToken(userAdminId: String): String {
         val now = Date()
-        val expiry = Date.from(Instant.now().plus(Duration.ofDays(180)))
+        val expiry = Date(now.time + authProperties.jwt.refreshTokenExpireTime)
 
         return Jwts.builder()
                 .setSubject(userAdminId)
