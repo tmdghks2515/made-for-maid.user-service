@@ -4,8 +4,8 @@ Content-Type: application/json
 
 {
   "oauthCode": "asfADjfa",
-  "email": "tmdghks2515@naver.com",
-  "oauthId": "aS2as4fF"
+  "email": "tmdghks0615@gmail.com",
+  "oauthId": "gasdfdsfas"
 }
 
 ### System Admin 생성
@@ -13,7 +13,7 @@ POST {{gatewayUrl}}/api/user/auth/admin/system
 Content-Type: application/json
 
 {
-  "accountId": "_T2VP5hLQ2u",
+  "accountId": "QtY0jrkJSeO",
   "nickname": "임아난 시스템 관리자",
   "systemSecret": "{{systemSecret}}"
 }
@@ -23,7 +23,7 @@ POST {{gatewayUrl}}/api/user/auth/admin/owner
 Content-Type: application/json
 
 {
-  "accountId": "_T2VP5hLQ2u",
+  "accountId": "QtY0jrkJSeO",
   "nickname": "임아난 사장님",
   "maidCafeId": "maidcafe_1"
 }
@@ -31,11 +31,12 @@ Content-Type: application/json
 ### MaidCafe Manager 생성
 POST {{gatewayUrl}}/api/user/auth/admin/manager
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
-  "accountId": "_T2VP5hLQ2u",
-  "nickname": "임아난 매니저",
-  "maidCafeId": "maidcafe_1"
+  "accountId": "VI5KSsuIRY6",
+  "nickname": "임아난 매니저4",
+  "maidCafeId": "maidcafe_4"
 }
 
 ### Maid 생성
@@ -43,7 +44,7 @@ POST {{gatewayUrl}}/api/user/auth/admin/maid
 Content-Type: application/json
 
 {
-  "accountId": "_T2VP5hLQ2u",
+  "accountId": "QtY0jrkJSeO",
   "nickname": "샤라쨩",
   "maidCafeId": "maidcafe_1"
 }

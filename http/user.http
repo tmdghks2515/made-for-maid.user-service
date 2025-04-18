@@ -4,8 +4,8 @@ Content-Type: application/json
 
 {
   "oauthCode": "asfADjfa",
-  "email": "tmdghks2515@naver.com",
-  "oauthId": "aS2as4fF"
+  "email": "tmdghks0615@gmail.com",
+  "oauthId": "gasdfdsfas"
 }
 
 ### 사용자 생성
@@ -13,7 +13,7 @@ POST {{gatewayUrl}}/api/user/auth
 Content-Type: application/json
 
 {
-  "accountId": "_T2VP5hLQ2u",
+  "accountId": "VI5KSsuIRY6",
   "nickname": "임아난",
-  "maidCafeId": "maidcafe_2"
+  "maidCafeId": "maidcafe_1"
 }
