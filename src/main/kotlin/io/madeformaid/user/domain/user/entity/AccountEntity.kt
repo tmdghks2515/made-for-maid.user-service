@@ -3,7 +3,7 @@ package io.madeformaid.user.domain.user.entity
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import io.madeformaid.shared.jpa.entity.BaseEntity
 import io.madeformaid.shared.jpa.idGenerator.ShortId
-import io.madeformaid.shared.vo.enums.OauthProvider
+import io.madeformaid.user.vo.OauthProvider
 import io.madeformaid.shared.vo.enums.Role
 import jakarta.persistence.*
 import org.hibernate.annotations.Filter
@@ -42,7 +42,7 @@ class AccountEntity(
         val users: MutableSet<UserEntity> = mutableSetOf(),
 ) : BaseEntity() {
         fun addUser(user: UserEntity) {
-                if (users.any { it.maidCafeId == user.maidCafeId }) {
+                if (users.any { it.cafeId == user.cafeId }) {
                         throw IllegalArgumentException("동일한 카페에 이미 가입된 계정이 존재합니다.")
                 }
 
@@ -50,9 +50,27 @@ class AccountEntity(
                 user.account = this
         }
 
-        fun addMaidCafeOwner(admin: UserEntity) {
-                if (users.any { it.maidCafeId == admin.maidCafeId && it.roles.contains(Role.MAID_CAFE_OWNER) }) {
+        fun addCafeOwner(admin: UserEntity) {
+                if (users.any { it.cafeId == admin.cafeId && it.roles.contains(Role.CAFE_OWNER) }) {
                         throw IllegalArgumentException("이미 가입된 사장님 계정이 존재합니다.")
+                }
+
+                users.add(admin)
+                admin.account = this
+        }
+
+        fun addCafeStaff(admin: UserEntity) {
+                if (users.any { it.cafeId == admin.cafeId && it.roles.contains(Role.CAFE_STAFF)}) {
+                        throw IllegalArgumentException("이미 가입된 스태프 계정이 존재합니다.")
+                }
+
+                users.add(admin)
+                admin.account = this
+        }
+
+        fun addCafeManager(admin: UserEntity) {
+                if (users.any { it.cafeId == admin.cafeId && it.roles.contains(Role.CAFE_MANAGER)}) {
+                        throw IllegalArgumentException("이미 가입된 매니저 계정이 존재합니다.")
                 }
 
                 users.add(admin)
@@ -62,24 +80,6 @@ class AccountEntity(
         fun addSystemAdmin(admin: UserEntity) {
                 if (users.any { it.roles.contains(Role.SYSTEM_ADMIN) }) {
                         throw IllegalArgumentException("이미 시스템 관리자 계정이 존재합니다.")
-                }
-
-                users.add(admin)
-                admin.account = this
-        }
-
-        fun addMaid(admin: UserEntity) {
-                if (users.any { it.maidCafeId == admin.maidCafeId && it.roles.contains(Role.MAID)}) {
-                        throw IllegalArgumentException("이미 가입된 메이드 계정이 존재합니다.")
-                }
-
-                users.add(admin)
-                admin.account = this
-        }
-
-        fun addMaidCafeManager(admin: UserEntity) {
-                if (users.any { it.maidCafeId == admin.maidCafeId && it.roles.contains(Role.MAID_CAFE_MANAGER)}) {
-                        throw IllegalArgumentException("이미 가입된 매니저 계정이 존재합니다.")
                 }
 
                 users.add(admin)
@@ -97,5 +97,5 @@ class AccountEntity(
                 }
 
         fun getSystemAdmin(): UserEntity? =
-                users.find { it.roles.contains(Role.SYSTEM_ADMIN) || it.roles.contains(Role.SYSTEM_MASTER) }
+                users.find { it.roles.contains(Role.SYSTEM_ADMIN) || it.roles.contains(Role.SUPER_ADMIN) }
 }

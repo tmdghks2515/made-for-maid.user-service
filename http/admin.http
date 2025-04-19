@@ -18,33 +18,34 @@ Content-Type: application/json
   "systemSecret": "{{systemSecret}}"
 }
 
-### MaidCafe Owner 생성
+### Cafe Owner 생성
 POST {{gatewayUrl}}/api/user/auth/admin/owner
 Content-Type: application/json
 
 {
   "accountId": "QtY0jrkJSeO",
   "nickname": "임아난 사장님",
-  "maidCafeId": "maidcafe_1"
+  "cafeId": "cafe_1"
 }
 
-### MaidCafe Manager 생성
+### Cafe Manager 생성
 POST {{gatewayUrl}}/api/user/auth/admin/manager
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
+Accept: application/json
 
 {
   "accountId": "VI5KSsuIRY6",
   "nickname": "임아난 매니저4",
-  "maidCafeId": "maidcafe_4"
+  "cafeId": "cafe_4"
 }
 
-### Maid 생성
+### Cafe Staff 생성
 POST {{gatewayUrl}}/api/user/auth/admin/maid
 Content-Type: application/json
 
 {
   "accountId": "QtY0jrkJSeO",
   "nickname": "샤라쨩",
-  "maidCafeId": "maidcafe_1"
+  "cafeId": "cafe_1"
 }

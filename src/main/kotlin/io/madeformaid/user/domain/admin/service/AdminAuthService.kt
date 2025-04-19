@@ -1,8 +1,7 @@
 package io.madeformaid.user.domain.admin.service
 
-import io.madeformaid.shared.vo.enums.OauthProvider
+import io.madeformaid.user.vo.OauthProvider
 import io.madeformaid.shared.vo.enums.Role
-import io.madeformaid.shared.vo.enums.SignInResStatus
 import io.madeformaid.user.domain.admin.dto.command.*
 import io.madeformaid.user.domain.admin.dto.data.AdminSignInResDTO
 import io.madeformaid.user.domain.user.entity.AccountEntity
@@ -10,6 +9,7 @@ import io.madeformaid.user.domain.admin.mapper.AdminMapper
 import io.madeformaid.user.domain.user.entity.UserEntity
 import io.madeformaid.user.domain.user.repository.AccountRepository
 import io.madeformaid.user.domain.user.repository.UserRepository
+import io.madeformaid.user.vo.SignInResStatus
 import io.madeformaid.user.utils.JwtTokenProvider
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
@@ -60,28 +60,60 @@ class AdminAuthService(
         }
     }
 
-    fun createMaidCafeOwner(command: CreateAdminCommand) : Pair<AdminSignInResDTO, String> {
+    fun createCafeOwner(command: CreateAdminCommand) : Pair<AdminSignInResDTO, String> {
         val account = accountRepository.findById(command.accountId)
                 .orElseThrow { IllegalArgumentException("Account with ID ${command.accountId} not found") }
 
         val createdAdmin = UserEntity(
                 account = account,
                 nickname = command.nickname,
-                roles = setOf(Role.USER, Role.MAID_CAFE_OWNER),
-                maidCafeId = command.maidCafeId,
+                roles = setOf(Role.USER, Role.CAFE_OWNER),
+                cafeId = command.cafeId,
         )
 
-        account.addMaidCafeOwner(createdAdmin)
+        account.addCafeOwner(createdAdmin)
         val savedAdmin = userRepository.save(createdAdmin)
         account.recentAdminId = savedAdmin.id
 
-        val maidCafeAdminDTO = adminMapper.entityToAdminDTO(savedAdmin)
+        val cafeAdminDTO = adminMapper.entityToAdminDTO(savedAdmin)
 
         return AdminSignInResDTO(
                 status = SignInResStatus.SIGN_IN_SUCCESS,
-                admin = maidCafeAdminDTO,
-                accessToken = jwtTokenProvider.createAccessToken(maidCafeAdminDTO),
-        ) to jwtTokenProvider.createRefreshToken(maidCafeAdminDTO.id)
+                admin = cafeAdminDTO,
+                accessToken = jwtTokenProvider.createAccessToken(cafeAdminDTO),
+        ) to jwtTokenProvider.createRefreshToken(cafeAdminDTO.id)
+    }
+
+    fun createCafeStaff(command: CreateAdminCommand) : String {
+        val account = accountRepository.findById(command.accountId)
+                .orElseThrow { IllegalArgumentException("Account with ID ${command.accountId} not found") }
+
+        val createdStaff = UserEntity(
+                account = account,
+                nickname = command.nickname,
+                cafeId = command.cafeId,
+                roles = setOf(Role.USER, Role.CAFE_STAFF),
+        )
+
+        account.addCafeStaff(createdStaff)
+
+        return userRepository.save(createdStaff).id ?: throw IllegalArgumentException("User ID cannot be null")
+    }
+
+    fun createCafeManager(command: CreateAdminCommand) : String {
+        val account = accountRepository.findById(command.accountId)
+                .orElseThrow { IllegalArgumentException("Account with ID ${command.accountId} not found") }
+
+        val createdManager = UserEntity(
+                account = account,
+                nickname = command.nickname,
+                cafeId = command.cafeId,
+                roles = setOf(Role.USER, Role.CAFE_MANAGER),
+        )
+
+        account.addCafeManager(createdManager)
+
+        return userRepository.save(createdManager).id ?: throw IllegalArgumentException("User ID cannot be null")
     }
 
     fun createSystemAdmin(command: CreateSystemAdminCommand) : Pair<AdminSignInResDTO, String> {
@@ -107,37 +139,5 @@ class AdminAuthService(
                 admin = systemAdminDTO,
                 accessToken = jwtTokenProvider.createAccessToken(systemAdminDTO),
         ) to jwtTokenProvider.createRefreshToken(systemAdminDTO.id)
-    }
-
-    fun createMaid(command: CreateAdminCommand) : String {
-        val account = accountRepository.findById(command.accountId)
-                .orElseThrow { IllegalArgumentException("Account with ID ${command.accountId} not found") }
-
-        val createdMaid = UserEntity(
-                account = account,
-                nickname = command.nickname,
-                maidCafeId = command.maidCafeId,
-                roles = setOf(Role.USER, Role.MAID),
-        )
-
-        account.addMaid(createdMaid)
-
-        return userRepository.save(createdMaid).id ?: throw IllegalArgumentException("User ID cannot be null")
-    }
-
-    fun createMaidCafeManager(command: CreateAdminCommand) : String {
-        val account = accountRepository.findById(command.accountId)
-                .orElseThrow { IllegalArgumentException("Account with ID ${command.accountId} not found") }
-
-        val createdManager = UserEntity(
-                account = account,
-                nickname = command.nickname,
-                maidCafeId = command.maidCafeId,
-                roles = setOf(Role.USER, Role.MAID_CAFE_MANAGER),
-        )
-
-        account.addMaidCafeManager(createdManager)
-
-        return userRepository.save(createdManager).id ?: throw IllegalArgumentException("User ID cannot be null")
     }
 }

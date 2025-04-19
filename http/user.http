@@ -15,5 +15,5 @@ Content-Type: application/json
 {
   "accountId": "VI5KSsuIRY6",
   "nickname": "임아난",
-  "maidCafeId": "maidcafe_1"
+  "cafeId": "cafe_1"
 }

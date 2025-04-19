@@ -1,6 +1,7 @@
 package io.madeformaid.user.domain.admin.dto.data
 
-import io.madeformaid.shared.vo.enums.SignInResStatus
+import io.madeformaid.user.vo.SignInResStatus
+
 
 data class AdminSignInResDTO(
         val status: SignInResStatus,

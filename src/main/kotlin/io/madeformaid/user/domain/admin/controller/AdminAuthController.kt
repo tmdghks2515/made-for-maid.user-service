@@ -51,11 +51,11 @@ class AdminAuthController(
     }
 
     @PostMapping("/owner")
-    fun createMaidCafeOwner(
+    fun createCafeOwner(
             @RequestBody command: CreateAdminCommand,
             response: HttpServletResponse
     ): ResponseEntity<AdminSignInResDTO> {
-        val (signInResponse, refreshToken) = adminAuthService.createMaidCafeOwner(command)
+        val (signInResponse, refreshToken) = adminAuthService.createCafeOwner(command)
 
         response.setHeader(
                 HttpHeaders.SET_COOKIE,
@@ -66,14 +66,14 @@ class AdminAuthController(
     }
 
     @PostMapping("/manager")
-    fun createMaidCafeManager(
+    fun createCafeManager(
             @RequestBody command: CreateAdminCommand,
     ): ResponseEntity<String> =
-            ResponseEntity.ok(adminAuthService.createMaidCafeManager(command))
+            ResponseEntity.ok(adminAuthService.createCafeManager(command))
 
-    @PostMapping("/maid")
-    fun createMaid(
+    @PostMapping("/staff")
+    fun createCafeStaff(
             @RequestBody command: CreateAdminCommand,
     ): ResponseEntity<String> =
-            ResponseEntity.ok(adminAuthService.createMaid(command))
+            ResponseEntity.ok(adminAuthService.createCafeStaff(command))
 }

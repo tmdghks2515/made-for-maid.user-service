@@ -19,8 +19,8 @@ class UserEntity(
         @Column(name = "profile_image_url")
         var profileImageUrl: String? = null,
 
-        @Column(name = "maid_cafe_id", length = 100)
-        val maidCafeId: String? = null,
+        @Column(name = "cafe_id", length = 100)
+        val cafeId: String? = null,
 
         @Column(name = "roles", nullable = false)
         @Convert(converter = RoleSetConverter::class)

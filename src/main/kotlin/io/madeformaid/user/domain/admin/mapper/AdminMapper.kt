@@ -12,7 +12,7 @@ class AdminMapper {
                     accountId = user.account?.id ?: throw IllegalArgumentException("Account ID cannot be null"),
                     nickname = user.nickname,
                     email = user.account?.email ?: throw IllegalArgumentException("Email cannot be null"),
-                    maidCafeId = user.maidCafeId,
+                    cafeId = user.cafeId,
                     roles = user.roles,
                     profileImageUrl = user.profileImageUrl,
             )
