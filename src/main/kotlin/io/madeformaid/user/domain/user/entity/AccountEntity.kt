@@ -18,6 +18,12 @@ class AccountEntity(
         @ShortId
         var id: String? = null,
 
+        @Column(name = "recent_user_id", length = 100)
+        var recentUserId: String? = null,
+
+        @Column(name = "recent_admin_id", length = 100)
+        var recentAdminId: String? = null,
+
         @Column(name = "email", nullable = false, length = 100)
         var email: String,
 
@@ -25,14 +31,8 @@ class AccountEntity(
         @Enumerated(EnumType.STRING)
         var oauthProvider: OauthProvider? = null,
 
-        @Column(name = "oauth_id", length = 100, unique = true)
+        @Column(name = "oauth_id", unique = true)
         var oauthId: String? = null,
-
-        @Column(name = "recent_user_id", length = 100)
-        var recentUserId: String? = null,
-
-        @Column(name = "recent_admin_id", length = 100)
-        var recentAdminId: String? = null,
 
         @Column(name = "is_active", nullable = false)
         var isActive: Boolean = true,
@@ -41,6 +41,10 @@ class AccountEntity(
         @JsonIgnoreProperties("account")
         val users: MutableSet<UserEntity> = mutableSetOf(),
 ) : BaseEntity() {
+        protected constructor() : this(
+                email = "",
+        )
+
         fun addUser(user: UserEntity) {
                 if (users.any { it.cafeId == user.cafeId }) {
                         throw IllegalArgumentException("동일한 카페에 이미 가입된 계정이 존재합니다.")
