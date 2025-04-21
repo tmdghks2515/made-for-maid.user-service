@@ -25,8 +25,3 @@ spring:
         format_sql: true
         show_sql: true
         default_schema: user_db
-
-logging:
-  level:
-    org.hibernate.SQL: debug
-    org.hibernate.type.descriptor.sql.BasicBinder: trace
