@@ -51,6 +51,11 @@ Content-Type: application/json
 }
 
 ### 관리자 프로필 목록 조회
-GET {{gatewayUrl}}/api/user/admin/profiles2
+GET {{gatewayUrl}}/api/user/admin/profiles
+Accept: application/json
+Authorization: Bearer {{accessToken}}
+
+### 관리자 프로필 선택
+POST {{gatewayUrl}}/api/user/admin/profile/68j_JWEBQmm
 Accept: application/json
 Authorization: Bearer {{accessToken}}
