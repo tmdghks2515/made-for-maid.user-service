@@ -30,19 +30,21 @@ class AdminAuthService(
                 OauthProvider.KAKAO
         )?.let { existingAccount ->
             existingAccount.getRecentSignedInAdmin()?.let { recentAdmin ->
+                val adminDTO = adminMapper.toAdminDTO(recentAdmin)
                 return AdminSignInResDTO(
                         status = SignInResStatus.SIGN_IN_SUCCESS,
                         accessToken = jwtTokenProvider.createAccessToken(
-                                adminMapper.entityToAdminDTO(recentAdmin),
+                                adminMapper.toAdminDTO(recentAdmin),
                         ),
-                        admin = adminMapper.entityToAdminDTO(recentAdmin)
-                ) to jwtTokenProvider.createRefreshToken(recentAdmin.id ?: throw IllegalArgumentException("Admin ID cannot be null"))
+                        admin = adminDTO
+                ) to jwtTokenProvider.createRefreshToken(adminDTO)
             }
 
             // admin 은 존재하지만 유효한 admin 이 존재하지 않는 경우 프로필 선택 화면으로 이동
             return AdminSignInResDTO(
                     status = SignInResStatus.PROFILE_SELECT,
                     accountId = existingAccount.id,
+                    accessToken = jwtTokenProvider.createTempToken(existingAccount.id ?: throw IllegalArgumentException("Account ID cannot be null")),
             ) to null
         } ?: run {
             val createdAccount = accountRepository.save(
@@ -75,13 +77,13 @@ class AdminAuthService(
         val savedAdmin = userRepository.save(createdAdmin)
         account.recentAdminId = savedAdmin.id
 
-        val cafeAdminDTO = adminMapper.entityToAdminDTO(savedAdmin)
+        val cafeAdminDTO = adminMapper.toAdminDTO(savedAdmin)
 
         return AdminSignInResDTO(
                 status = SignInResStatus.SIGN_IN_SUCCESS,
                 admin = cafeAdminDTO,
                 accessToken = jwtTokenProvider.createAccessToken(cafeAdminDTO),
-        ) to jwtTokenProvider.createRefreshToken(cafeAdminDTO.id)
+        ) to jwtTokenProvider.createRefreshToken(cafeAdminDTO)
     }
 
     fun createCafeStaff(command: CreateAdminCommand) : String {
@@ -132,12 +134,12 @@ class AdminAuthService(
         val savedAdmin = userRepository.save(createdAdmin)
         account.recentAdminId = savedAdmin.id
 
-        val systemAdminDTO = adminMapper.entityToAdminDTO(savedAdmin)
+        val systemAdminDTO = adminMapper.toAdminDTO(savedAdmin)
 
         return AdminSignInResDTO(
                 status = SignInResStatus.SIGN_IN_SUCCESS,
                 admin = systemAdminDTO,
                 accessToken = jwtTokenProvider.createAccessToken(systemAdminDTO),
-        ) to jwtTokenProvider.createRefreshToken(systemAdminDTO.id)
+        ) to jwtTokenProvider.createRefreshToken(systemAdminDTO)
     }
 }

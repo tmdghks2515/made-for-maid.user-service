@@ -37,7 +37,7 @@ class UserAuthService(
                         status = SignInResStatus.SIGN_IN_SUCCESS,
                         accessToken = jwtTokenProvider.createAccessToken(recentSignedInUserDTO),
                         user = recentSignedInUserDTO,
-                ) to jwtTokenProvider.createRefreshToken(recentSignedInUserDTO.id)
+                ) to jwtTokenProvider.createRefreshToken(recentSignedInUserDTO)
             } ?: run {
                 // account 는 존재하지만 user 가 존재하지 않는 경우
                 UserSignInResDTO(
@@ -79,6 +79,6 @@ class UserAuthService(
         return CreateUserResDTO(
                 user = userDTO,
                 accessToken = jwtTokenProvider.createAccessToken(userDTO),
-        ) to jwtTokenProvider.createRefreshToken(userDTO.id)
+        ) to jwtTokenProvider.createRefreshToken(userDTO)
     }
 }

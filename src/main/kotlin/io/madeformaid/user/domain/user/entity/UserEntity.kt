@@ -26,8 +26,13 @@ class UserEntity(
         @Column(name = "profile_image_url")
         var profileImageUrl: String? = null,
 
-        @Column(name = "roles", nullable = false)
-        @Convert(converter = RoleSetConverter::class)
+        @ElementCollection(fetch = FetchType.LAZY)
+        @CollectionTable(
+                name = "user_role",
+                joinColumns = [JoinColumn(name = "user_id")]
+        )
+        @Enumerated(EnumType.STRING)
+        @Column(name = "role", length = 20)
         val roles: Set<Role>,
 
         @Column(name = "approved_at")

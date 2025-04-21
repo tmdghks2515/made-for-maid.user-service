@@ -16,8 +16,9 @@ class JwtTokenProvider(
 
     fun createAccessToken(user: UserDTO): String {
         return generateToken(
-                subject = user.id,
+                subject = user.accountId,
                 roles = user.roles.map { it.name }.toSet(),
+                userId = user.id,
                 expiresInMillis = authProperties.jwt.accessTokenExpireTime * 1000L
         )
     }
@@ -26,19 +27,39 @@ class JwtTokenProvider(
         return generateToken(
                 subject = admin.id,
                 roles = admin.roles.map { it.name }.toSet(),
+                userId = admin.id,
                 expiresInMillis = authProperties.jwt.accessTokenExpireTime * 1000L
         )
     }
 
-    fun createRefreshToken(userAdminId: String): String {
+    fun createRefreshToken(user: UserDTO): String {
         return generateToken(
-                subject = userAdminId,
-                roles = emptySet(), // refresh token에는 roles 생략
+                subject = user.accountId,
+                roles = emptySet(),
+                userId = user.id,
                 expiresInMillis = authProperties.jwt.refreshTokenExpireTime * 1000L
         )
     }
 
-    private fun generateToken(subject: String, roles: Set<String>, expiresInMillis: Long): String {
+    fun createRefreshToken(admin: AdminDTO): String {
+        return generateToken(
+                subject = admin.id,
+                roles = emptySet(),
+                userId = admin.id,
+                expiresInMillis = authProperties.jwt.refreshTokenExpireTime * 1000L
+        )
+    }
+
+    fun createTempToken(accountId: String): String {
+        return generateToken(
+                subject = accountId,
+                roles = emptySet(),
+                userId = null,
+                expiresInMillis = authProperties.jwt.accessTokenExpireTime * 1000L
+        )
+    }
+
+    private fun generateToken(subject: String, userId: String?, roles: Set<String>, expiresInMillis: Long): String {
         val now = Date()
         val expiry = Date(now.time + expiresInMillis)
 
@@ -48,7 +69,12 @@ class JwtTokenProvider(
                 .withExpiresAt(expiry)
 
         if (roles.isNotEmpty()) {
-            builder.withClaim("roles", roles.toList())
+            builder
+                    .withClaim("roles", roles.toList())
+        }
+        if (userId?.isNotBlank() == true) {
+            builder
+                    .withClaim("userId", userId)
         }
 
         return builder.sign(algorithm)

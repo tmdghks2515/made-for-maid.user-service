@@ -49,3 +49,8 @@ Content-Type: application/json
   "nickname": "샤라쨩",
   "cafeId": "cafe_1"
 }
+
+### 관리자 프로필 목록 조회
+GET {{gatewayUrl}}/api/user/admin/profiles2
+Accept: application/json
+Authorization: Bearer {{accessToken}}
