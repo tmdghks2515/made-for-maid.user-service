@@ -27,7 +27,7 @@ class AccountEntity(
         @Column(name = "email", nullable = false, length = 100)
         var email: String,
 
-        @Column(name = "oauth_provider", length = 20)
+        @Column(name = "oauth_provider", columnDefinition = "varchar(100)")
         @Enumerated(EnumType.STRING)
         var oauthProvider: OauthProvider? = null,
 
