@@ -1,7 +1,7 @@
 package io.madeformaid.user.domain.user.entity
 
-import io.madeformaid.shared.jpa.entity.BaseEntity
-import io.madeformaid.shared.jpa.idGenerator.ShortId
+import io.madeformaid.webmvc.jpa.entity.BaseEntity
+import io.madeformaid.webmvc.jpa.idGenerator.ShortId
 import io.madeformaid.shared.vo.enums.Role
 import jakarta.persistence.*
 import java.time.LocalDateTime
@@ -17,8 +17,8 @@ class UserEntity(
         @JoinColumn(name = "account_id", nullable = false)
         var account: AccountEntity? = null,
 
-        @Column(name = "cafe_id", length = 100)
-        val cafeId: String? = null,
+        @Column(name = "shop_id", length = 100)
+        val shopId: String? = null,
 
         @Column(name = "nickname", nullable = false, length = 30)
         var nickname: String,

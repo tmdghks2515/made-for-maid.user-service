@@ -66,7 +66,7 @@ class UserAuthService(
 
         val createdUser = UserEntity(
                 nickname = command.nickname,
-                cafeId = command.cafeId,
+                shopId = command.shopId,
                 roles = setOf(Role.USER)
         )
 

@@ -1,8 +1,8 @@
 package io.madeformaid.user.domain.user.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import io.madeformaid.shared.jpa.entity.BaseEntity
-import io.madeformaid.shared.jpa.idGenerator.ShortId
+import io.madeformaid.webmvc.jpa.entity.BaseEntity
+import io.madeformaid.webmvc.jpa.idGenerator.ShortId
 import io.madeformaid.user.vo.OauthProvider
 import io.madeformaid.shared.vo.enums.Role
 import jakarta.persistence.*
@@ -46,7 +46,7 @@ class AccountEntity(
         )
 
         fun addUser(user: UserEntity) {
-                if (users.any { it.cafeId == user.cafeId }) {
+                if (users.any { it.shopId == user.shopId }) {
                         throw IllegalArgumentException("동일한 카페에 이미 가입된 계정이 존재합니다.")
                 }
 
@@ -54,8 +54,8 @@ class AccountEntity(
                 user.account = this
         }
 
-        fun addCafeOwner(admin: UserEntity) {
-                if (users.any { it.cafeId == admin.cafeId && it.roles.contains(Role.CAFE_OWNER) }) {
+        fun addShopOwner(admin: UserEntity) {
+                if (users.any { it.shopId == admin.shopId && it.roles.contains(Role.SHOP_OWNER) }) {
                         throw IllegalArgumentException("이미 가입된 사장님 계정이 존재합니다.")
                 }
 
@@ -63,8 +63,8 @@ class AccountEntity(
                 admin.account = this
         }
 
-        fun addCafeStaff(admin: UserEntity) {
-                if (users.any { it.cafeId == admin.cafeId && it.roles.contains(Role.CAFE_STAFF)}) {
+        fun addShopStaff(admin: UserEntity) {
+                if (users.any { it.shopId == admin.shopId && it.roles.contains(Role.SHOP_STAFF)}) {
                         throw IllegalArgumentException("이미 가입된 스태프 계정이 존재합니다.")
                 }
 
@@ -72,8 +72,8 @@ class AccountEntity(
                 admin.account = this
         }
 
-        fun addCafeManager(admin: UserEntity) {
-                if (users.any { it.cafeId == admin.cafeId && it.roles.contains(Role.CAFE_MANAGER)}) {
+        fun addShopManager(admin: UserEntity) {
+                if (users.any { it.shopId == admin.shopId && it.roles.contains(Role.SHOP_MANAGER)}) {
                         throw IllegalArgumentException("이미 가입된 매니저 계정이 존재합니다.")
                 }
 
@@ -102,4 +102,12 @@ class AccountEntity(
 
         fun getSystemAdmin(): UserEntity? =
                 users.find { it.roles.contains(Role.SYSTEM_ADMIN) || it.roles.contains(Role.SUPER_ADMIN) }
+
+        fun getAdmins(): List<UserEntity> =
+                users.filter { it.roles.contains(Role.SHOP_OWNER) ||
+                        it.roles.contains(Role.SHOP_MANAGER) ||
+                        it.roles.contains(Role.SHOP_STAFF) ||
+                        it.roles.contains(Role.SUPER_ADMIN) ||
+                        it.roles.contains(Role.SYSTEM_ADMIN)
+                }
 }

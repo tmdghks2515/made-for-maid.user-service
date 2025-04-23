@@ -7,7 +7,7 @@ data class UserDTO(
         val accountId: String,
         val email: String,
         val nickname: String,
-        val cafeId: String,
+        val shopId: String,
         val roles: Set<Role>,
         val profileImageUrl: String?,
 )

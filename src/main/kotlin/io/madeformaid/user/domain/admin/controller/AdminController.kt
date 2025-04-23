@@ -1,6 +1,6 @@
 package io.madeformaid.user.domain.admin.controller
 
-import io.madeformaid.shared.context.AuthContext
+import io.madeformaid.webmvc.context.AuthContext
 import io.madeformaid.user.domain.admin.dto.data.AdminProfileDTO
 import io.madeformaid.user.domain.admin.dto.data.AdminSignInResDTO
 import io.madeformaid.user.domain.admin.service.AdminService

@@ -1,8 +1,8 @@
 package io.madeformaid.user.domain.admin.service
 
-import io.madeformaid.shared.context.AuthContext
-import io.madeformaid.shared.exception.BusinessException
-import io.madeformaid.shared.exception.ErrorCode
+import io.madeformaid.webmvc.context.AuthContext
+import io.madeformaid.webmvc.exception.BusinessException
+import io.madeformaid.webmvc.exception.ErrorCode
 import io.madeformaid.user.domain.admin.dto.data.AdminProfileDTO
 import io.madeformaid.user.domain.admin.dto.data.AdminSignInResDTO
 import io.madeformaid.user.domain.admin.mapper.AdminMapper
@@ -38,7 +38,6 @@ class AdminService(
 
         return AdminSignInResDTO(
                 status = SignInResStatus.SIGN_IN_SUCCESS,
-                accountId = account.id,
                 accessToken = jwtTokenProvider.createAccessToken(adminDTO),
                 admin = adminDTO,
         ) to jwtTokenProvider.createRefreshToken(adminDTO)

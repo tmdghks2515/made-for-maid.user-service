@@ -9,5 +9,5 @@ data class AdminDTO(
         val nickname: String,
         val roles: Set<Role>,
         val profileImageUrl: String?,
-        val cafeId: String? = null,
+        val shopId: String? = null,
 )

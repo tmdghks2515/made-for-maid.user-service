@@ -50,12 +50,21 @@ class JwtTokenProvider(
         )
     }
 
-    fun createTempToken(accountId: String): String {
+    fun createAccountAccessToken(accountId: String): String {
         return generateToken(
                 subject = accountId,
                 roles = emptySet(),
                 userId = null,
                 expiresInMillis = authProperties.jwt.accessTokenExpireTime * 1000L
+        )
+    }
+
+    fun createAccountRefreshToken(accountId: String): String {
+        return generateToken(
+            subject = accountId,
+            roles = emptySet(),
+            userId = null,
+            expiresInMillis = authProperties.jwt.refreshTokenExpireTime * 1000L
         )
     }
 

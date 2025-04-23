@@ -51,11 +51,11 @@ class AdminAuthController(
     }
 
     @PostMapping("/owner")
-    fun createCafeOwner(
+    fun createShopOwner(
             @RequestBody command: CreateAdminCommand,
             response: HttpServletResponse
     ): ResponseEntity<AdminSignInResDTO> {
-        val (signInResponse, refreshToken) = adminAuthService.createCafeOwner(command)
+        val (signInResponse, refreshToken) = adminAuthService.createShopOwner(command)
 
         response.setHeader(
                 HttpHeaders.SET_COOKIE,
@@ -66,14 +66,14 @@ class AdminAuthController(
     }
 
     @PostMapping("/manager")
-    fun createCafeManager(
+    fun createManager(
             @RequestBody command: CreateAdminCommand,
     ): ResponseEntity<String> =
-            ResponseEntity.ok(adminAuthService.createCafeManager(command))
+            ResponseEntity.ok(adminAuthService.createShopManager(command))
 
     @PostMapping("/staff")
-    fun createCafeStaff(
+    fun createShopStaff(
             @RequestBody command: CreateAdminCommand,
     ): ResponseEntity<String> =
-            ResponseEntity.ok(adminAuthService.createCafeStaff(command))
+            ResponseEntity.ok(adminAuthService.createShopStaff(command))
 }

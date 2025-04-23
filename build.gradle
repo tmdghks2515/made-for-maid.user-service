@@ -27,6 +27,14 @@ repositories {
 			password = project.findProperty("gpr.key")
 		}
 	}
+	maven {
+		name = "GitHubPackages"
+		url = uri("https://maven.pkg.github.com/tmdghks2515/made-for-maid.webmvc-lib")
+		credentials {
+			username = project.findProperty("gpr.user")
+			password = project.findProperty("gpr.key")
+		}
+	}
 }
 
 ext {
@@ -36,6 +44,7 @@ ext {
 
 dependencies {
 	implementation 'io.madeformaid:shared-lib:0.0.1-SNAPSHOT'
+	implementation 'io.madeformaid:webmvc-lib:0.0.1-SNAPSHOT'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'

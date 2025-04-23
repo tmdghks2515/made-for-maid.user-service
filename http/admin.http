@@ -18,17 +18,17 @@ Content-Type: application/json
   "systemSecret": "{{systemSecret}}"
 }
 
-### Cafe Owner 생성
+### Shop Owner 생성
 POST {{gatewayUrl}}/api/user/auth/admin/owner
 Content-Type: application/json
 
 {
   "accountId": "QtY0jrkJSeO",
   "nickname": "임아난 사장님",
-  "cafeId": "cafe_1"
+  "shopId": "shop_1"
 }
 
-### Cafe Manager 생성
+### Shop Manager 생성
 POST {{gatewayUrl}}/api/user/auth/admin/manager
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
@@ -37,17 +37,17 @@ Accept: application/json
 {
   "accountId": "VI5KSsuIRY6",
   "nickname": "임아난 매니저4",
-  "cafeId": "cafe_4"
+  "shopId": "shop_1"
 }
 
-### Cafe Staff 생성
+### Shop Staff 생성
 POST {{gatewayUrl}}/api/user/auth/admin/maid
 Content-Type: application/json
 
 {
   "accountId": "QtY0jrkJSeO",
   "nickname": "샤라쨩",
-  "cafeId": "cafe_1"
+  "shopId": "shop_1"
 }
 
 ### 관리자 프로필 목록 조회

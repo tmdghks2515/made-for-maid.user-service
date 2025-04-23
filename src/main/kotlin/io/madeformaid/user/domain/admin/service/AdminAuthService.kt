@@ -25,95 +25,94 @@ class AdminAuthService(
         @Value("\${auth.system-secret}") private val systemSecret: String,
 ) {
     fun adminKakaoSignIn(command: AdminKakaoSignInCommand): Pair<AdminSignInResDTO, String?> {
-        accountRepository.findByOauthIdAndOauthProvider(
-                command.oauthId,
-                OauthProvider.KAKAO
-        )?.let { existingAccount ->
-            existingAccount.getRecentSignedInAdmin()?.let { recentAdmin ->
-                val adminDTO = adminMapper.toAdminDTO(recentAdmin)
+        val existingAccount = accountRepository.findByOauthIdAndOauthProvider(
+            command.oauthId,
+            OauthProvider.KAKAO
+        )
+
+        if (existingAccount != null) {
+            val existingAccountId = existingAccount.id ?: error("Account ID null")
+            val existingAdmins = existingAccount.getAdmins()
+
+            if (existingAdmins.isEmpty())
                 return AdminSignInResDTO(
-                        status = SignInResStatus.SIGN_IN_SUCCESS,
-                        accessToken = jwtTokenProvider.createAccessToken(
-                                adminMapper.toAdminDTO(recentAdmin),
-                        ),
-                        admin = adminDTO
-                ) to jwtTokenProvider.createRefreshToken(adminDTO)
-            }
-
-            // admin 은 존재하지만 유효한 admin 이 존재하지 않는 경우 프로필 선택 화면으로 이동
-            return AdminSignInResDTO(
-                    status = SignInResStatus.PROFILE_SELECT,
-                    accountId = existingAccount.id,
-                    accessToken = jwtTokenProvider.createTempToken(existingAccount.id ?: throw IllegalArgumentException("Account ID cannot be null")),
-            ) to null
-        } ?: run {
-            val createdAccount = accountRepository.save(
-                    AccountEntity(
-                            email = command.email,
-                            oauthProvider = OauthProvider.KAKAO,
-                            oauthId = command.oauthId,
-                    )
-            )
-
-            return AdminSignInResDTO(
                     status = SignInResStatus.SIGN_UP_SUCCESS,
-                    accountId = createdAccount.id,
-            ) to null
+                    accessToken = jwtTokenProvider.createAccountAccessToken(existingAccountId),
+                ) to jwtTokenProvider.createAccountRefreshToken(existingAccountId)
+
+            return AdminSignInResDTO(
+                status = SignInResStatus.PROFILE_SELECT,
+                accessToken = jwtTokenProvider.createAccountAccessToken(existingAccountId),
+            ) to jwtTokenProvider.createAccountRefreshToken(existingAccountId)
         }
+
+        val createdAccount = accountRepository.save(
+            AccountEntity(
+                email = command.email,
+                oauthProvider = OauthProvider.KAKAO,
+                oauthId = command.oauthId,
+            )
+        )
+        val createdAccountId = createdAccount.id ?: error("Account ID null")
+
+        return AdminSignInResDTO(
+            status = SignInResStatus.SIGN_UP_SUCCESS,
+            accessToken = jwtTokenProvider.createAccountAccessToken(createdAccountId),
+        ) to jwtTokenProvider.createAccountRefreshToken(createdAccountId)
     }
 
-    fun createCafeOwner(command: CreateAdminCommand) : Pair<AdminSignInResDTO, String> {
+    fun createShopOwner(command: CreateAdminCommand) : Pair<AdminSignInResDTO, String> {
         val account = accountRepository.findById(command.accountId)
                 .orElseThrow { IllegalArgumentException("Account with ID ${command.accountId} not found") }
 
         val createdAdmin = UserEntity(
                 account = account,
                 nickname = command.nickname,
-                roles = setOf(Role.USER, Role.CAFE_OWNER),
-                cafeId = command.cafeId,
+                roles = setOf(Role.USER, Role.SHOP_OWNER),
+                shopId = command.shopId,
         )
 
-        account.addCafeOwner(createdAdmin)
+        account.addShopOwner(createdAdmin)
         val savedAdmin = userRepository.save(createdAdmin)
         account.recentAdminId = savedAdmin.id
 
-        val cafeAdminDTO = adminMapper.toAdminDTO(savedAdmin)
+        val shopAdminDTO = adminMapper.toAdminDTO(savedAdmin)
 
         return AdminSignInResDTO(
                 status = SignInResStatus.SIGN_IN_SUCCESS,
-                admin = cafeAdminDTO,
-                accessToken = jwtTokenProvider.createAccessToken(cafeAdminDTO),
-        ) to jwtTokenProvider.createRefreshToken(cafeAdminDTO)
+                admin = shopAdminDTO,
+                accessToken = jwtTokenProvider.createAccessToken(shopAdminDTO),
+        ) to jwtTokenProvider.createRefreshToken(shopAdminDTO)
     }
 
-    fun createCafeStaff(command: CreateAdminCommand) : String {
+    fun createShopStaff(command: CreateAdminCommand) : String {
         val account = accountRepository.findById(command.accountId)
                 .orElseThrow { IllegalArgumentException("Account with ID ${command.accountId} not found") }
 
         val createdStaff = UserEntity(
                 account = account,
                 nickname = command.nickname,
-                cafeId = command.cafeId,
-                roles = setOf(Role.USER, Role.CAFE_STAFF),
+                shopId = command.shopId,
+                roles = setOf(Role.USER, Role.SHOP_STAFF),
         )
 
-        account.addCafeStaff(createdStaff)
+        account.addShopStaff(createdStaff)
 
         return userRepository.save(createdStaff).id ?: throw IllegalArgumentException("User ID cannot be null")
     }
 
-    fun createCafeManager(command: CreateAdminCommand) : String {
+    fun createShopManager(command: CreateAdminCommand) : String {
         val account = accountRepository.findById(command.accountId)
                 .orElseThrow { IllegalArgumentException("Account with ID ${command.accountId} not found") }
 
         val createdManager = UserEntity(
                 account = account,
                 nickname = command.nickname,
-                cafeId = command.cafeId,
-                roles = setOf(Role.USER, Role.CAFE_MANAGER),
+                shopId = command.shopId,
+                roles = setOf(Role.USER, Role.SHOP_MANAGER),
         )
 
-        account.addCafeManager(createdManager)
+        account.addShopManager(createdManager)
 
         return userRepository.save(createdManager).id ?: throw IllegalArgumentException("User ID cannot be null")
     }
