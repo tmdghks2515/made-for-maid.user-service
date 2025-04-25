@@ -32,7 +32,7 @@ class UserEntity(
                 joinColumns = [JoinColumn(name = "user_id")]
         )
         @Enumerated(EnumType.STRING)
-        @Column(name = "role", length = 20)
+        @Column(name = "role", columnDefinition = "varchar(20)")
         val roles: Set<Role>,
 
         @Column(name = "approved_at")
