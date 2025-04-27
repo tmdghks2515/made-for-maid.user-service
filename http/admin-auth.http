@@ -1,0 +1,9 @@
+### 관리자 로그인 (카카오)
+POST {{gatewayUrl}}/api/user/auth/admin/signin/kakao
+Content-Type: application/json
+
+{
+  "oauthCode": "asfADjfa",
+  "email": "tmdghks0615@gmail.com",
+  "oauthId": "gasdfdsfas"
+}

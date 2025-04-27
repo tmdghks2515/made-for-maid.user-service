@@ -1,15 +1,5 @@
-### 관리자 로그인 (카카오)
-POST {{gatewayUrl}}/api/user/auth/admin/signin/kakao
-Content-Type: application/json
-
-{
-  "oauthCode": "asfADjfa",
-  "email": "tmdghks0615@gmail.com",
-  "oauthId": "gasdfdsfas"
-}
-
 ### System Admin 생성
-POST {{gatewayUrl}}/api/user/auth/admin/system
+POST {{gatewayUrl}}/api/user/admin/system
 Content-Type: application/json
 
 {
@@ -19,7 +9,7 @@ Content-Type: application/json
 }
 
 ### Shop Owner 생성
-POST {{gatewayUrl}}/api/user/auth/admin/owner
+POST {{gatewayUrl}}/api/user/admin/owner
 Content-Type: application/json
 
 {
@@ -29,7 +19,7 @@ Content-Type: application/json
 }
 
 ### Shop Manager 생성
-POST {{gatewayUrl}}/api/user/auth/admin/manager
+POST {{gatewayUrl}}/api/user/admin/manager
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 Accept: application/json
@@ -41,7 +31,7 @@ Accept: application/json
 }
 
 ### Shop Staff 생성
-POST {{gatewayUrl}}/api/user/auth/admin/maid
+POST {{gatewayUrl}}/api/user/admin/maid
 Content-Type: application/json
 
 {

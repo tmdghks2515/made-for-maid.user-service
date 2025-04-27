@@ -1,5 +1,7 @@
 package io.madeformaid.user.domain.admin.controller
 
+import io.madeformaid.user.domain.admin.dto.command.CreateAdminCommand
+import io.madeformaid.user.domain.admin.dto.command.CreateSystemAdminCommand
 import io.madeformaid.webmvc.context.AuthContext
 import io.madeformaid.user.domain.admin.dto.data.AdminProfileDTO
 import io.madeformaid.user.domain.admin.dto.data.AdminSignInResDTO
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -39,4 +42,59 @@ class AdminController(
 
         return ResponseEntity.ok(signInResponse)
     }
+
+    @PostMapping("/system")
+    fun createSystemAdmin(
+        @RequestBody command: CreateSystemAdminCommand,
+        response: HttpServletResponse
+    ): ResponseEntity<AdminSignInResDTO> {
+        val (signInResponse, refreshToken) = adminService.createSystemAdmin(command)
+
+        response.setHeader(
+            HttpHeaders.SET_COOKIE,
+            cookieProvider.createRefreshTokenCookie(refreshToken).toString()
+        )
+
+        return ResponseEntity.ok(signInResponse)
+    }
+
+    @PostMapping("/owner")
+    fun createOwner(
+        @RequestBody command: CreateAdminCommand,
+        response: HttpServletResponse
+    ): ResponseEntity<AdminSignInResDTO> {
+        val (signInResponse, refreshToken) = adminService.createShopOwner(
+            command,
+            AuthContext.getAccountId()
+        )
+
+        response.setHeader(
+            HttpHeaders.SET_COOKIE,
+            cookieProvider.createRefreshTokenCookie(refreshToken).toString()
+        )
+
+        return ResponseEntity.ok(signInResponse)
+    }
+
+    @PostMapping("/manager")
+    fun createManager(
+        @RequestBody command: CreateAdminCommand,
+    ): ResponseEntity<String> =
+        ResponseEntity.ok(
+            adminService.createShopManager(
+                command,
+                AuthContext.getAccountId()
+            )
+        )
+
+    @PostMapping("/staff")
+    fun createStaf(
+        @RequestBody command: CreateAdminCommand,
+    ): ResponseEntity<String> =
+        ResponseEntity.ok(
+            adminService.createShopStaff(
+                command,
+                AuthContext.getAccountId()
+            )
+        )
 }

@@ -34,46 +34,4 @@ class AdminAuthController(
 
         return ResponseEntity.ok(signInResponse)
     }
-
-    @PostMapping("/system")
-    fun createSystemAdmin(
-            @RequestBody command: CreateSystemAdminCommand,
-            response: HttpServletResponse
-    ): ResponseEntity<AdminSignInResDTO> {
-        val (signInResponse, refreshToken) = adminAuthService.createSystemAdmin(command)
-
-        response.setHeader(
-                HttpHeaders.SET_COOKIE,
-                cookieProvider.createRefreshTokenCookie(refreshToken).toString()
-        )
-
-        return ResponseEntity.ok(signInResponse)
-    }
-
-    @PostMapping("/owner")
-    fun createShopOwner(
-            @RequestBody command: CreateAdminCommand,
-            response: HttpServletResponse
-    ): ResponseEntity<AdminSignInResDTO> {
-        val (signInResponse, refreshToken) = adminAuthService.createShopOwner(command)
-
-        response.setHeader(
-                HttpHeaders.SET_COOKIE,
-                cookieProvider.createRefreshTokenCookie(refreshToken).toString()
-        )
-
-        return ResponseEntity.ok(signInResponse)
-    }
-
-    @PostMapping("/manager")
-    fun createManager(
-            @RequestBody command: CreateAdminCommand,
-    ): ResponseEntity<String> =
-            ResponseEntity.ok(adminAuthService.createShopManager(command))
-
-    @PostMapping("/staff")
-    fun createShopStaff(
-            @RequestBody command: CreateAdminCommand,
-    ): ResponseEntity<String> =
-            ResponseEntity.ok(adminAuthService.createShopStaff(command))
 }
