@@ -52,7 +52,7 @@ class AdminService(
                 .orElseThrow { BusinessException(ErrorCode.NOT_FOUND) }
         val admin = account.users.find { it.id == userId } ?: throw BusinessException(ErrorCode.NOT_FOUND)
 
-        checkNotNull(admin.approvedAt) { "승인되지 않은 프로필 입니다. 사장님에게 승인을 요청해주세요." }
+        check(admin.isApproved()) { "승인되지 않은 프로필 입니다. 사장님에게 승인을 요청해주세요." }
 
         val adminDTO = adminMapper.toAdminDTO(admin)
 

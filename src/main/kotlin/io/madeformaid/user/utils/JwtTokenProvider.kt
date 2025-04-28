@@ -25,7 +25,7 @@ class JwtTokenProvider(
 
     fun createAccessToken(admin: AdminDTO): String {
         return generateToken(
-                subject = admin.id,
+                subject = admin.accountId,
                 roles = admin.roles.map { it.name }.toSet(),
                 userId = admin.id,
                 expiresInMillis = authProperties.jwt.accessTokenExpireTime * 1000L
@@ -43,7 +43,7 @@ class JwtTokenProvider(
 
     fun createRefreshToken(admin: AdminDTO): String {
         return generateToken(
-                subject = admin.id,
+                subject = admin.accountId,
                 roles = emptySet(),
                 userId = admin.id,
                 expiresInMillis = authProperties.jwt.refreshTokenExpireTime * 1000L

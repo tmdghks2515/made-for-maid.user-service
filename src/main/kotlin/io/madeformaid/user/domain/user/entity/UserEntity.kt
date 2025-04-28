@@ -42,4 +42,18 @@ class UserEntity(
                 nickname = "",
                 roles = emptySet(),
         )
+
+        fun isApprovalRequired(): Boolean {
+                val nonApprovalRoles = setOf(Role.SUPER_ADMIN, Role.SYSTEM_ADMIN, Role.SHOP_OWNER)
+                roles.forEach { role ->
+                        if (nonApprovalRoles.contains(role)) {
+                                return false
+                        }
+                }
+                return true
+        }
+
+        fun isApproved(): Boolean {
+                return !isApprovalRequired() || approvedAt != null
+        }
 }
