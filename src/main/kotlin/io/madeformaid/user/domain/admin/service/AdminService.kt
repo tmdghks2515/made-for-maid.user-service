@@ -2,6 +2,7 @@ package io.madeformaid.user.domain.admin.service
 
 import io.madeformaid.shared.vo.enums.Role
 import io.madeformaid.user.domain.admin.dto.command.CreateAdminCommand
+import io.madeformaid.user.domain.admin.dto.command.CreateStaffCommand
 import io.madeformaid.user.domain.admin.dto.command.CreateSystemAdminCommand
 import io.madeformaid.webmvc.context.AuthContext
 import io.madeformaid.webmvc.exception.BusinessException
@@ -88,7 +89,7 @@ class AdminService(
         ) to jwtTokenProvider.createRefreshToken(shopAdminDTO)
     }
 
-    fun createShopStaff(command: CreateAdminCommand, accountId: String) : String {
+    fun createShopStaff(command: CreateStaffCommand, accountId: String) : String {
         val account = accountRepository.findById(accountId)
             .orElseThrow { IllegalArgumentException("Account with ID $accountId not found") }
 
@@ -97,6 +98,8 @@ class AdminService(
             nickname = command.nickname,
             shopId = command.shopId,
             roles = setOf(Role.USER, Role.SHOP_STAFF),
+            staffType = command.staffType,
+            staffConcepts = command.staffConcepts
         )
 
         account.addShopStaff(createdStaff)

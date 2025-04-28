@@ -1,6 +1,7 @@
 package io.madeformaid.user.domain.admin.controller
 
 import io.madeformaid.user.domain.admin.dto.command.CreateAdminCommand
+import io.madeformaid.user.domain.admin.dto.command.CreateStaffCommand
 import io.madeformaid.user.domain.admin.dto.command.CreateSystemAdminCommand
 import io.madeformaid.webmvc.context.AuthContext
 import io.madeformaid.user.domain.admin.dto.data.AdminProfileDTO
@@ -89,7 +90,7 @@ class AdminController(
 
     @PostMapping("/staff")
     fun createStaf(
-        @RequestBody command: CreateAdminCommand,
+        @RequestBody command: CreateStaffCommand,
     ): ResponseEntity<String> =
         ResponseEntity.ok(
             adminService.createShopStaff(

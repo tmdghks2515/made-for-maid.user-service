@@ -3,6 +3,8 @@ package io.madeformaid.user.domain.user.entity
 import io.madeformaid.webmvc.jpa.entity.BaseEntity
 import io.madeformaid.webmvc.jpa.idGenerator.ShortId
 import io.madeformaid.shared.vo.enums.Role
+import io.madeformaid.user.vo.StaffConcept
+import io.madeformaid.user.vo.StaffType
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -26,14 +28,27 @@ class UserEntity(
         @Column(name = "profile_image_url")
         var profileImageUrl: String? = null,
 
+        @Enumerated(EnumType.STRING)
+        @Column(name = "staff_type", columnDefinition = "varchar(100)")
+        val staffType: StaffType? = null,
+
+        @ElementCollection(fetch = FetchType.LAZY)
+        @CollectionTable(
+                name = "staff_concept",
+                joinColumns = [JoinColumn(name = "user_id")]
+        )
+        @Enumerated(EnumType.STRING)
+        @Column(name = "staff_concept", columnDefinition = "varchar(100)")
+        val staffConcepts: Set<StaffConcept>? = null,
+
         @ElementCollection(fetch = FetchType.LAZY)
         @CollectionTable(
                 name = "user_role",
                 joinColumns = [JoinColumn(name = "user_id")]
         )
         @Enumerated(EnumType.STRING)
-        @Column(name = "role", columnDefinition = "varchar(20)")
-        val roles: Set<Role>,
+        @Column(name = "role", columnDefinition = "varchar(100)")
+        val roles: Set<Role> = emptySet(),
 
         @Column(name = "approved_at")
         var approvedAt: LocalDateTime? = null,
@@ -44,16 +59,24 @@ class UserEntity(
         )
 
         fun isApprovalRequired(): Boolean {
+                if (getPrimaryRole() == Role.USER) {
+                        return false
+                }
+
                 val nonApprovalRoles = setOf(Role.SUPER_ADMIN, Role.SYSTEM_ADMIN, Role.SHOP_OWNER)
                 roles.forEach { role ->
                         if (nonApprovalRoles.contains(role)) {
                                 return false
                         }
                 }
+
                 return true
         }
 
         fun isApproved(): Boolean {
                 return !isApprovalRequired() || approvedAt != null
         }
+
+        fun getPrimaryRole(): Role =
+                roles.minByOrNull { it.ordinal } ?: Role.USER
 }

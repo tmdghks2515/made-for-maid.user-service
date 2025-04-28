@@ -65,8 +65,11 @@ class AccountEntity(
 
         fun addShopStaff(admin: UserEntity) {
                 if (users.any { it.shopId == admin.shopId && it.roles.contains(Role.SHOP_STAFF)}) {
-                        throw IllegalArgumentException("이미 가입된 스태프 계정이 존재합니다.")
+                        throw IllegalArgumentException("이미 가입된 메이드/집사 계정이 존재합니다.")
                 }
+
+                requireNotNull(admin.staffType) { "메이드 or 집사를 선택해주세요."}
+                require(admin.staffConcepts?.isNotEmpty() == true) { "컨셉 유형을 최소 하나 이상 선택해주세요."}
 
                 users.add(admin)
                 admin.account = this

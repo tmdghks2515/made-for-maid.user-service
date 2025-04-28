@@ -9,20 +9,24 @@ import org.springframework.stereotype.Component
 class AdminMapper {
     fun toAdminDTO(user: UserEntity): AdminDTO =
             AdminDTO(
-                    id = user.id ?: throw IllegalArgumentException("Admin ID cannot be null"),
-                    accountId = user.account?.id ?: throw IllegalArgumentException("Account ID cannot be null"),
+                    id = user.id ?: error("Admin ID cannot be null"),
+                    accountId = user.account?.id ?: error("Account ID cannot be null"),
                     nickname = user.nickname,
-                    email = user.account?.email ?: throw IllegalArgumentException("Email cannot be null"),
+                    email = user.account?.email ?: error("Email cannot be null"),
                     shopId = user.shopId,
                     roles = user.roles,
                     profileImageUrl = user.profileImageUrl,
+                    primaryRole = user.getPrimaryRole(),
+                    staffType = user.staffType,
+                    staffConcepts = user.staffConcepts,
             )
 
     fun toAdminProfileDTO(user: UserEntity): AdminProfileDTO =
             AdminProfileDTO(
-                    userId = user.id ?: throw IllegalArgumentException("User ID cannot be null"),
+                    userId = user.id ?:error("User ID cannot be null"),
                     nickname = user.nickname,
                     profileImageUrl = user.profileImageUrl,
                     shopId = user.shopId ?: error("Shop ID cannot be null"),
+                    staffType = user.staffType,
             )
 }
