@@ -12,6 +12,7 @@ import io.madeformaid.user.domain.admin.mapper.AdminMapper
 import io.madeformaid.user.domain.user.entity.UserEntity
 import io.madeformaid.user.domain.user.repository.AccountRepository
 import io.madeformaid.user.domain.user.repository.UserRepository
+import io.madeformaid.user.grpc.client.ShopNameFetcher
 import io.madeformaid.user.utils.JwtTokenProvider
 import io.madeformaid.user.vo.SignInResStatus
 import org.springframework.beans.factory.annotation.Value
@@ -23,14 +24,27 @@ import org.springframework.transaction.annotation.Transactional
 class AdminService(
         private val accountRepository: AccountRepository,
         private val userRepository: UserRepository,
+        private val shopNameFetcher: ShopNameFetcher,
         private val adminMapper: AdminMapper,
         private val jwtTokenProvider: JwtTokenProvider,
         @Value("\${auth.system-secret}") private val systemSecret: String,
 ) {
     @Transactional(readOnly = true)
     fun getAdminProfiles(accountId: String): List<AdminProfileDTO> {
-        return userRepository.findAdminsByAccountId(accountId)
-                .map { adminMapper.toAdminProfileDTO(it) }
+        val results = userRepository.findAdminsByAccountId(accountId)
+            .map { adminMapper.toAdminProfileDTO(it) }
+
+        runCatching {
+            results.map { it.shopId }
+                .distinct().takeIf { it.isNotEmpty() }?.let { shopIds ->
+                    val shopNameMap = shopNameFetcher.fetchShopNames(shopIds)
+                    results.forEach {
+                        it.shopName = shopNameMap[it.shopId]
+                    }
+                }
+        }
+
+        return results
     }
 
     fun selectProfile(userId: String): Pair<AdminSignInResDTO, String> {

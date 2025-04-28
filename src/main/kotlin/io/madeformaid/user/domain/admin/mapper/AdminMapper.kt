@@ -23,5 +23,6 @@ class AdminMapper {
                     userId = user.id ?: throw IllegalArgumentException("User ID cannot be null"),
                     nickname = user.nickname,
                     profileImageUrl = user.profileImageUrl,
+                    shopId = user.shopId ?: error("Shop ID cannot be null"),
             )
 }
