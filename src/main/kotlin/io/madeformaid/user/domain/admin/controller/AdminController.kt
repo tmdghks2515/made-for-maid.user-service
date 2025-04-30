@@ -3,12 +3,17 @@ package io.madeformaid.user.domain.admin.controller
 import io.madeformaid.user.domain.admin.dto.command.CreateAdminCommand
 import io.madeformaid.user.domain.admin.dto.command.CreateStaffCommand
 import io.madeformaid.user.domain.admin.dto.command.CreateSystemAdminCommand
+import io.madeformaid.user.domain.admin.dto.data.AdminDTO
 import io.madeformaid.webmvc.context.AuthContext
 import io.madeformaid.user.domain.admin.dto.data.AdminProfileDTO
 import io.madeformaid.user.domain.admin.dto.data.AdminSignInResDTO
+import io.madeformaid.user.domain.admin.dto.query.SearchAdminQuery
+import io.madeformaid.user.domain.admin.service.AdminQueryService
 import io.madeformaid.user.domain.admin.service.AdminService
-import io.madeformaid.user.utils.CookieProvider
+import io.madeformaid.user.global.utils.CookieProvider
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -22,11 +27,12 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/user/admin")
 class AdminController(
         private val adminService: AdminService,
+        private val adminQueryService: AdminQueryService,
         private val cookieProvider: CookieProvider
 ) {
     @GetMapping("/profiles")
     fun getProfiles(): ResponseEntity<List<AdminProfileDTO>> {
-        return ResponseEntity.ok(adminService.getAdminProfiles(AuthContext.getAccountId()))
+        return ResponseEntity.ok(adminQueryService.getAdminProfiles(AuthContext.getAccountId()))
     }
 
     @PostMapping("/profile/{userId}")
@@ -98,4 +104,15 @@ class AdminController(
                 AuthContext.getAccountId()
             )
         )
+
+    @GetMapping("/search")
+    fun searchAdmin(
+        @RequestBody query: SearchAdminQuery,
+        pageable: Pageable
+    ): ResponseEntity<Page<AdminDTO>> {
+        val shopIdSettedQuery = query.copy(
+            shopId = query.shopId ?: AuthContext.getShopId()
+        )
+        return ResponseEntity.ok(adminQueryService.searchAdmins(shopIdSettedQuery, pageable))
+    }
 }

@@ -1,4 +1,4 @@
-package io.madeformaid.user.utils
+package io.madeformaid.user.global.utils
 
 import io.madeformaid.shared.config.AuthProperties
 import org.springframework.http.ResponseCookie

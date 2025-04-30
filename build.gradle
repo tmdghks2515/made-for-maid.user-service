@@ -5,6 +5,8 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'com.google.protobuf' version '0.9.4'
 	id 'org.jetbrains.kotlin.plugin.jpa' version '1.9.25'
+	id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
+	id 'org.jetbrains.kotlin.kapt' version '1.9.22'
 }
 
 group = 'io.madeformaid'
@@ -53,8 +55,13 @@ dependencies {
 	implementation 'org.jetbrains.kotlin:kotlin-reflect'
 	implementation 'org.springframework.grpc:spring-grpc-server-web-spring-boot-starter'
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
-	runtimeOnly 'org.postgresql:postgresql'
 	implementation 'com.auth0:java-jwt:4.4.0'
+	implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+	kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
+	kapt("jakarta.annotation:jakarta.annotation-api")
+	kapt("jakarta.persistence:jakarta.persistence-api")
+	kapt "javax.persistence:javax.persistence-api:2.2"
+	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
 	testImplementation 'org.springframework.grpc:spring-grpc-test'
@@ -98,6 +105,38 @@ allOpen {
 	annotation 'jakarta.persistence.MappedSuperclass'
 	annotation 'jakarta.persistence.Embeddable'
 }
+
+// QueryDSL 설정부 - start
+
+def generated = layout.buildDirectory.dir("generated/source/kapt/main").get().asFile
+
+// Kotlin sourceSet에 QClass 디렉토리 포함 (Gradle 9 호환)
+sourceSets {
+	main {
+		kotlin {
+			srcDirs += [generated]
+		}
+	}
+}
+
+// clean 시 QClass 삭제
+tasks.named("clean") {
+	doLast {
+		delete generated
+	}
+}
+
+kapt {
+	generateStubs = true
+}
+
+// Gradle 9.0 대응 — kapt → generateProto 의존성 선언
+afterEvaluate {
+	tasks.named("kaptGenerateStubsKotlin") {
+		dependsOn(tasks.named("generateProto"))
+	}
+}
+// QueryDSL 설정부 - end
 
 tasks.named('test') {
 	useJUnitPlatform()

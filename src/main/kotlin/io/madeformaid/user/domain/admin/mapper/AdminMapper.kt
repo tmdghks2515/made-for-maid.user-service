@@ -16,7 +16,7 @@ class AdminMapper {
                     shopId = user.shopId,
                     roles = user.roles,
                     profileImageUrl = user.profileImageUrl,
-                    primaryRole = user.getPrimaryRole(),
+                    primaryRole = user.primaryRole,
                     staffType = user.staffType,
                     staffConcepts = user.staffConcepts,
             )

@@ -1,8 +1,8 @@
 package io.madeformaid.user.domain.admin.dto.data
 
 import io.madeformaid.shared.vo.enums.Role
-import io.madeformaid.user.vo.StaffConcept
-import io.madeformaid.user.vo.StaffType
+import io.madeformaid.user.global.vo.StaffConcept
+import io.madeformaid.user.global.vo.StaffType
 
 data class AdminDTO(
         val id: String,

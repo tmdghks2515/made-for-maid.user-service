@@ -3,7 +3,7 @@ package io.madeformaid.user.domain.admin.controller
 import io.madeformaid.user.domain.admin.dto.command.*
 import io.madeformaid.user.domain.admin.dto.data.AdminSignInResDTO
 import io.madeformaid.user.domain.admin.service.AdminAuthService
-import io.madeformaid.user.utils.CookieProvider
+import io.madeformaid.user.global.utils.CookieProvider
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity

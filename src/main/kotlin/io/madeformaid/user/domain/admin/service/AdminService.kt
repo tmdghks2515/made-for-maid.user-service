@@ -4,19 +4,16 @@ import io.madeformaid.shared.vo.enums.Role
 import io.madeformaid.user.domain.admin.dto.command.CreateAdminCommand
 import io.madeformaid.user.domain.admin.dto.command.CreateStaffCommand
 import io.madeformaid.user.domain.admin.dto.command.CreateSystemAdminCommand
-import io.madeformaid.user.domain.admin.dto.data.AdminDTO
 import io.madeformaid.webmvc.context.AuthContext
 import io.madeformaid.webmvc.exception.BusinessException
 import io.madeformaid.webmvc.exception.ErrorCode
-import io.madeformaid.user.domain.admin.dto.data.AdminProfileDTO
 import io.madeformaid.user.domain.admin.dto.data.AdminSignInResDTO
 import io.madeformaid.user.domain.admin.mapper.AdminMapper
 import io.madeformaid.user.domain.user.entity.UserEntity
 import io.madeformaid.user.domain.user.repository.AccountRepository
 import io.madeformaid.user.domain.user.repository.UserRepository
-import io.madeformaid.user.grpc.client.ShopNameFetcher
-import io.madeformaid.user.utils.JwtTokenProvider
-import io.madeformaid.user.vo.SignInResStatus
+import io.madeformaid.user.global.utils.JwtTokenProvider
+import io.madeformaid.user.global.vo.SignInResStatus
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -26,29 +23,10 @@ import org.springframework.transaction.annotation.Transactional
 class AdminService(
         private val accountRepository: AccountRepository,
         private val userRepository: UserRepository,
-        private val shopNameFetcher: ShopNameFetcher,
         private val adminMapper: AdminMapper,
         private val jwtTokenProvider: JwtTokenProvider,
         @Value("\${auth.system-secret}") private val systemSecret: String,
 ) {
-    @Transactional(readOnly = true)
-    fun getAdminProfiles(accountId: String): List<AdminProfileDTO> {
-        val results = userRepository.findAdminsByAccountId(accountId)
-            .map { adminMapper.toAdminProfileDTO(it) }
-
-        runCatching {
-            results.map { it.shopId }
-                .distinct().takeIf { it.isNotEmpty() }?.let { shopIds ->
-                    val shopNameMap = shopNameFetcher.fetchShopNames(shopIds)
-                    results.forEach {
-                        it.shopName = shopNameMap[it.shopId]
-                    }
-                }
-        }
-
-        return results
-    }
-
     fun selectProfile(userId: String): Pair<AdminSignInResDTO, String> {
         val account = accountRepository.findById(AuthContext.getAccountId())
                 .orElseThrow { BusinessException(ErrorCode.NOT_FOUND) }
@@ -74,6 +52,7 @@ class AdminService(
             account = account,
             nickname = command.nickname,
             roles = setOf(Role.USER, Role.SHOP_OWNER),
+            primaryRole = Role.SHOP_OWNER,
             shopId = command.shopId,
         )
 
@@ -99,6 +78,7 @@ class AdminService(
             nickname = command.nickname,
             shopId = command.shopId,
             roles = setOf(Role.USER, Role.SHOP_STAFF),
+            primaryRole = Role.SHOP_STAFF,
             staffType = command.staffType,
             staffConcepts = command.staffConcepts
         )
@@ -117,6 +97,7 @@ class AdminService(
             nickname = command.nickname,
             shopId = command.shopId,
             roles = setOf(Role.USER, Role.SHOP_MANAGER),
+            primaryRole = Role.SHOP_MANAGER,
         )
 
         account.addShopManager(createdManager)
@@ -134,6 +115,7 @@ class AdminService(
             account = account,
             nickname = command.nickname,
             roles = setOf(Role.USER, Role.SYSTEM_ADMIN),
+            primaryRole = Role.SYSTEM_ADMIN,
         )
 
         account.addSystemAdmin(createdAdmin)
@@ -147,9 +129,5 @@ class AdminService(
             admin = systemAdminDTO,
             accessToken = jwtTokenProvider.createAccessToken(systemAdminDTO),
         ) to jwtTokenProvider.createRefreshToken(systemAdminDTO)
-    }
-
-    fun searchAdmins() : AdminDTO {
-        TODO()
     }
 }

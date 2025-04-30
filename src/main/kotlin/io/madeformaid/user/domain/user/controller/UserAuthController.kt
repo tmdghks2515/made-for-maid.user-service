@@ -5,7 +5,7 @@ import io.madeformaid.user.domain.user.dto.data.CreateUserResDTO
 import io.madeformaid.user.domain.user.dto.data.UserSignInResDTO
 import io.madeformaid.user.domain.user.service.UserAuthService
 import io.madeformaid.user.domain.user.service.UserService
-import io.madeformaid.user.utils.CookieProvider
+import io.madeformaid.user.global.utils.CookieProvider
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity

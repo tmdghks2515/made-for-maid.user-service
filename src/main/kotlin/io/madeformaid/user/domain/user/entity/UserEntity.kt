@@ -3,8 +3,8 @@ package io.madeformaid.user.domain.user.entity
 import io.madeformaid.webmvc.jpa.entity.BaseEntity
 import io.madeformaid.webmvc.jpa.idGenerator.ShortId
 import io.madeformaid.shared.vo.enums.Role
-import io.madeformaid.user.vo.StaffConcept
-import io.madeformaid.user.vo.StaffType
+import io.madeformaid.user.global.vo.StaffConcept
+import io.madeformaid.user.global.vo.StaffType
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -50,16 +50,21 @@ class UserEntity(
         @Column(name = "role", columnDefinition = "varchar(100)")
         val roles: Set<Role> = emptySet(),
 
+        @Enumerated(EnumType.STRING)
+        @Column(name = "primary_role", columnDefinition = "varchar(100)")
+        val primaryRole: Role,
+
         @Column(name = "approved_at")
         var approvedAt: LocalDateTime? = null,
 ) : BaseEntity() {
         protected constructor() : this(
                 nickname = "",
                 roles = emptySet(),
+                primaryRole = Role.USER,
         )
 
         fun isApprovalRequired(): Boolean {
-                if (getPrimaryRole() == Role.USER) {
+                if (primaryRole == Role.USER) {
                         return false
                 }
 
@@ -76,7 +81,4 @@ class UserEntity(
         fun isApproved(): Boolean {
                 return !isApprovalRequired() || approvedAt != null
         }
-
-        fun getPrimaryRole(): Role =
-                roles.minByOrNull { it.ordinal } ?: Role.USER
 }

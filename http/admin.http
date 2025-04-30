@@ -49,3 +49,17 @@ Authorization: Bearer {{accessToken}}
 POST {{gatewayUrl}}/api/user/admin/profile/68j_JWEBQmm
 Accept: application/json
 Authorization: Bearer {{accessToken}}
+
+### 관리자 조회
+GET {{gatewayUrl}}/api/user/admin/search
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "nicknameLike": null,
+  "primaryRoles": ["SHOP_OWNER"],
+  "staffType": null,
+  "page": 0,
+  "size": 10
+}

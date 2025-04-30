@@ -3,7 +3,7 @@ package io.madeformaid.user.domain.user.entity
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import io.madeformaid.webmvc.jpa.entity.BaseEntity
 import io.madeformaid.webmvc.jpa.idGenerator.ShortId
-import io.madeformaid.user.vo.OauthProvider
+import io.madeformaid.user.global.vo.OauthProvider
 import io.madeformaid.shared.vo.enums.Role
 import jakarta.persistence.*
 import org.hibernate.annotations.Filter

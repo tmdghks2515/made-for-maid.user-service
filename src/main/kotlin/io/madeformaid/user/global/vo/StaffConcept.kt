@@ -1,4 +1,4 @@
-package io.madeformaid.user.vo
+package io.madeformaid.user.global.vo
 
 import io.madeformaid.shared.vo.enums.DescribableEnum
 

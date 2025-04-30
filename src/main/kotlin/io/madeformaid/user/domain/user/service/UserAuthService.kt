@@ -1,6 +1,6 @@
 package io.madeformaid.user.domain.user.service
 
-import io.madeformaid.user.vo.OauthProvider
+import io.madeformaid.user.global.vo.OauthProvider
 import io.madeformaid.shared.vo.enums.Role
 import io.madeformaid.user.domain.user.dto.command.CreateUserCommand
 import io.madeformaid.user.domain.user.dto.command.UserKakaoSignInCommand
@@ -11,8 +11,8 @@ import io.madeformaid.user.domain.user.entity.UserEntity
 import io.madeformaid.user.domain.user.mapper.UserMapper
 import io.madeformaid.user.domain.user.repository.AccountRepository
 import io.madeformaid.user.domain.user.repository.UserRepository
-import io.madeformaid.user.vo.SignInResStatus
-import io.madeformaid.user.utils.JwtTokenProvider
+import io.madeformaid.user.global.vo.SignInResStatus
+import io.madeformaid.user.global.utils.JwtTokenProvider
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -67,7 +67,8 @@ class UserAuthService(
         val createdUser = UserEntity(
                 nickname = command.nickname,
                 shopId = command.shopId,
-                roles = setOf(Role.USER)
+                roles = setOf(Role.USER),
+                primaryRole = Role.USER,
         )
 
         account.addUser(createdUser)

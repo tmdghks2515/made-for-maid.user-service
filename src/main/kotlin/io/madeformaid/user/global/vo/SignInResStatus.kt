@@ -1,4 +1,4 @@
-package io.madeformaid.user.vo
+package io.madeformaid.user.global.vo
 
 enum class SignInResStatus {
     SIGN_UP_SUCCESS,

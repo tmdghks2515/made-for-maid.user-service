@@ -1,14 +1,12 @@
-package io.madeformaid.user.vo
+package io.madeformaid.user.global.vo
 
 import io.madeformaid.shared.vo.enums.DescribableEnum
 
-enum class OauthProvider(
+enum class StaffType(
     private val displayName: String,
 ) : DescribableEnum {
-    GOOGLE("구글"),
-    KAKAO("카카오"),
-    NAVER("네이버"),
-    NONE("none"),
+    MAID("메이드"),
+    BUTLER("집사"),
     ;
 
     override fun getDisplayName(): String = displayName

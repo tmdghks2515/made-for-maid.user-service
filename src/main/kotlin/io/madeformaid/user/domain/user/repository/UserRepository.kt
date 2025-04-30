@@ -1,10 +1,11 @@
 package io.madeformaid.user.domain.user.repository
 
 import io.madeformaid.user.domain.user.entity.UserEntity
+import io.madeformaid.user.domain.user.repository.custom.UserRepositoryCustom
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
-interface UserRepository : JpaRepository<UserEntity, String> {
+interface UserRepository : JpaRepository<UserEntity, String>, UserRepositoryCustom {
     @Query(
         """
                 SELECT u FROM UserEntity u

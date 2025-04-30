@@ -1,12 +1,11 @@
 package io.madeformaid.user.domain.admin.dto.query
 
+import io.madeformaid.shared.vo.enums.Role
+import io.madeformaid.user.global.vo.StaffType
+
 data class SearchAdminQuery(
-    val accountId: String,
-    val email: String? = null,
-    val nickname: String? = null,
-    val roles: Set<String>? = null,
-    val primaryRole: String? = null,
     val shopId: String? = null,
-    val staffType: String? = null,
-    val staffConcepts: Set<String>? = null,
+    val nicknameLike: String? = null,
+    val primaryRoles: List<Role>? = null,
+    val staffType: StaffType? = null,
 )

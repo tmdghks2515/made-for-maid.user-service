@@ -1,6 +1,6 @@
 package io.madeformaid.user.domain.user.dto.data
 
-import io.madeformaid.user.vo.SignInResStatus
+import io.madeformaid.user.global.vo.SignInResStatus
 
 
 data class UserSignInResDTO(

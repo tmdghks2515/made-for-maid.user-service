@@ -1,4 +1,4 @@
-package io.madeformaid.user.utils
+package io.madeformaid.user.global.utils
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm

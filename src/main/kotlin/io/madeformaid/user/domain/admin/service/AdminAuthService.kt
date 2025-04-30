@@ -1,12 +1,12 @@
 package io.madeformaid.user.domain.admin.service
 
-import io.madeformaid.user.vo.OauthProvider
+import io.madeformaid.user.global.vo.OauthProvider
 import io.madeformaid.user.domain.admin.dto.command.*
 import io.madeformaid.user.domain.admin.dto.data.AdminSignInResDTO
 import io.madeformaid.user.domain.user.entity.AccountEntity
 import io.madeformaid.user.domain.user.repository.AccountRepository
-import io.madeformaid.user.vo.SignInResStatus
-import io.madeformaid.user.utils.JwtTokenProvider
+import io.madeformaid.user.global.vo.SignInResStatus
+import io.madeformaid.user.global.utils.JwtTokenProvider
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
