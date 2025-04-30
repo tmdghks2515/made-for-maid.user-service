@@ -19,6 +19,7 @@ class JwtTokenProvider(
                 subject = user.accountId,
                 roles = user.roles.map { it.name }.toSet(),
                 userId = user.id,
+                shopId = user.shopId,
                 expiresInMillis = authProperties.jwt.accessTokenExpireTime * 1000L
         )
     }
@@ -28,6 +29,7 @@ class JwtTokenProvider(
                 subject = admin.accountId,
                 roles = admin.roles.map { it.name }.toSet(),
                 userId = admin.id,
+                shopId = admin.shopId,
                 expiresInMillis = authProperties.jwt.accessTokenExpireTime * 1000L
         )
     }
@@ -35,7 +37,6 @@ class JwtTokenProvider(
     fun createRefreshToken(user: UserDTO): String {
         return generateToken(
                 subject = user.accountId,
-                roles = emptySet(),
                 userId = user.id,
                 expiresInMillis = authProperties.jwt.refreshTokenExpireTime * 1000L
         )
@@ -44,7 +45,6 @@ class JwtTokenProvider(
     fun createRefreshToken(admin: AdminDTO): String {
         return generateToken(
                 subject = admin.accountId,
-                roles = emptySet(),
                 userId = admin.id,
                 expiresInMillis = authProperties.jwt.refreshTokenExpireTime * 1000L
         )
@@ -53,8 +53,6 @@ class JwtTokenProvider(
     fun createAccountAccessToken(accountId: String): String {
         return generateToken(
                 subject = accountId,
-                roles = emptySet(),
-                userId = null,
                 expiresInMillis = authProperties.jwt.accessTokenExpireTime * 1000L
         )
     }
@@ -62,13 +60,17 @@ class JwtTokenProvider(
     fun createAccountRefreshToken(accountId: String): String {
         return generateToken(
             subject = accountId,
-            roles = emptySet(),
-            userId = null,
             expiresInMillis = authProperties.jwt.refreshTokenExpireTime * 1000L
         )
     }
 
-    private fun generateToken(subject: String, userId: String?, roles: Set<String>, expiresInMillis: Long): String {
+    private fun generateToken(
+        subject: String,
+        userId: String? = null,
+        shopId: String? = null,
+        roles: Set<String>? = null,
+        expiresInMillis: Long
+    ): String {
         val now = Date()
         val expiry = Date(now.time + expiresInMillis)
 
@@ -77,13 +79,17 @@ class JwtTokenProvider(
                 .withIssuedAt(now)
                 .withExpiresAt(expiry)
 
-        if (roles.isNotEmpty()) {
+        if (roles?.isNotEmpty() == true) {
             builder
                     .withClaim("roles", roles.toList())
         }
         if (userId?.isNotBlank() == true) {
             builder
                     .withClaim("userId", userId)
+        }
+        if (shopId?.isNotBlank() == true) {
+            builder
+                    .withClaim("shopId", shopId)
         }
 
         return builder.sign(algorithm)

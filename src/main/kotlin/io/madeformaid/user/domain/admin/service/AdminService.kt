@@ -4,6 +4,7 @@ import io.madeformaid.shared.vo.enums.Role
 import io.madeformaid.user.domain.admin.dto.command.CreateAdminCommand
 import io.madeformaid.user.domain.admin.dto.command.CreateStaffCommand
 import io.madeformaid.user.domain.admin.dto.command.CreateSystemAdminCommand
+import io.madeformaid.user.domain.admin.dto.data.AdminDTO
 import io.madeformaid.webmvc.context.AuthContext
 import io.madeformaid.webmvc.exception.BusinessException
 import io.madeformaid.webmvc.exception.ErrorCode
@@ -146,5 +147,9 @@ class AdminService(
             admin = systemAdminDTO,
             accessToken = jwtTokenProvider.createAccessToken(systemAdminDTO),
         ) to jwtTokenProvider.createRefreshToken(systemAdminDTO)
+    }
+
+    fun searchAdmins() : AdminDTO {
+        TODO()
     }
 }
