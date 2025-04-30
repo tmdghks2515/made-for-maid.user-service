@@ -61,7 +61,8 @@ Authorization: Bearer {{accessToken}}
   "primaryRoles": ["SHOP_OWNER"],
   "staffType": null,
   "page": 0,
-  "size": 10
+  "size": 10,
+  "sort": "createdAt,desc"
 }
 
 ### 관리자 승인 처리

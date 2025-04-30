@@ -106,8 +106,8 @@ class AdminController(
         )
 
     @GetMapping("/search")
-    fun searchAdmin(
-        @RequestBody query: SearchAdminQuery,
+    fun searchAdmins(
+        query: SearchAdminQuery,
         pageable: Pageable
     ): ResponseEntity<Page<AdminDTO>> {
         val shopIdSettedQuery = query.copy(

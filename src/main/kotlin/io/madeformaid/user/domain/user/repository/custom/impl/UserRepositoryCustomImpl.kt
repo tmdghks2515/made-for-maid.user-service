@@ -31,13 +31,25 @@ class UserRepositoryCustomImpl(
             query.nicknameLike?.let { qUser.nickname.containsIgnoreCase(it) },
             query.primaryRoles?.takeIf { it.isNotEmpty() }?.let { qUser.primaryRole.`in`(it) },
             query.staffType?.let { qUser.staffType.eq(it) },
-        )
+        ).toTypedArray()
+
+        val orders = pageable.sort.toList().mapNotNull { order ->
+            val property = order.property
+            val direction = order.direction
+
+            when (property) {
+                "createdAt" -> if (direction.isAscending) qUser.createdAt.asc() else qUser.createdAt.desc()
+                "nickname" -> if (direction.isAscending) qUser.nickname.asc() else qUser.nickname.desc()
+                else -> null // 알 수 없는 필드는 무시
+            }
+        }.toTypedArray()
 
         val content = queryFactory
             .selectFrom(qUser)
             .join(qUser.account, qAccount)
             .distinct()
-            .where(*conditions.toTypedArray())
+            .where(*conditions)
+            .orderBy(*orders)
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
             .fetch()
@@ -45,7 +57,7 @@ class UserRepositoryCustomImpl(
         val count = queryFactory
             .select(qUser.countDistinct())
             .from(qUser)
-            .where(*conditions.toTypedArray())
+            .where(*conditions)
             .fetchOne() ?: 0L
 
         return PageImpl(content, pageable, count)
