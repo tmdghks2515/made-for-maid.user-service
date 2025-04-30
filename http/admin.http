@@ -63,3 +63,7 @@ Authorization: Bearer {{accessToken}}
   "page": 0,
   "size": 10
 }
+
+### 관리자 승인 처리
+POST {{gatewayUrl}}/api/user/admin/approve/i-43Gh-iTei
+Authorization: Bearer {{accessToken}}

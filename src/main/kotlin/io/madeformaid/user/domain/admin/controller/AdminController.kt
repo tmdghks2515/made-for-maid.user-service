@@ -115,4 +115,13 @@ class AdminController(
         )
         return ResponseEntity.ok(adminQueryService.searchAdmins(shopIdSettedQuery, pageable))
     }
+
+    @PostMapping("/approve/{userId}")
+    fun approveAdmin(
+        @PathVariable userId: String,
+    ): ResponseEntity<Void> {
+        adminService.approveAdmin(userId, AuthContext.getUserId())
+
+        return ResponseEntity.ok().build()
+    }
 }

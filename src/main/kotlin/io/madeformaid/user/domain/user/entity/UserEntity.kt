@@ -81,4 +81,10 @@ class UserEntity(
         fun isApproved(): Boolean {
                 return !isApprovalRequired() || approvedAt != null
         }
+
+        fun approved() {
+                check(isApprovalRequired()) { "승인이 필요 없는 사용자 프로필 입니다." }
+                check(!isApproved()) { "이미 승인된 사용자 프로필 입니다." }
+                approvedAt = LocalDateTime.now()
+        }
 }

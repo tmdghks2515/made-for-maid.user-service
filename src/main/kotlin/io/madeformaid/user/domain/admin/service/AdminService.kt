@@ -130,4 +130,18 @@ class AdminService(
             accessToken = jwtTokenProvider.createAccessToken(systemAdminDTO),
         ) to jwtTokenProvider.createRefreshToken(systemAdminDTO)
     }
+
+    fun approveAdmin(userId: String, approvedBy: String) {
+        val approvedByUser = userRepository.findById(approvedBy)
+            .orElseThrow { BusinessException(ErrorCode.NOT_FOUND) }
+        val admin = userRepository.findById(userId)
+            .orElseThrow { BusinessException(ErrorCode.NOT_FOUND) }
+
+        check(approvedByUser.shopId == admin.shopId) { "승인할 수 없는 프로필입니다." }
+        check(approvedByUser.primaryRole == Role.SHOP_OWNER ||
+                    approvedByUser.primaryRole == Role.SHOP_MANAGER) { "승인할 수 있는 권한이 없습니다." }
+
+        admin.approved()
+        userRepository.save(admin)
+    }
 }

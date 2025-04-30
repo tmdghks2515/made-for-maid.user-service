@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository
 @Repository
 class UserRepositoryCustomImpl(
     private val queryFactory: JPAQueryFactory,
-)  : UserRepositoryCustom{
+) : UserRepositoryCustom {
 
     override fun searchAdmins(
         query: SearchAdminQuery,
