@@ -5,7 +5,6 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'com.google.protobuf' version '0.9.4'
 	id 'org.jetbrains.kotlin.plugin.jpa' version '1.9.25'
-	id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
 	id 'org.jetbrains.kotlin.kapt' version '1.9.22'
 }
 
@@ -20,7 +19,6 @@ java {
 
 repositories {
 	mavenCentral()
-	mavenLocal()
 	maven {
 		name = "GitHubPackages"
 		url = uri("https://maven.pkg.github.com/tmdghks2515/made-for-maid.shared-lib")
@@ -37,6 +35,14 @@ repositories {
 			password = project.findProperty("gpr.key")
 		}
 	}
+	maven {
+		name = "GitHubPackages"
+		url = uri("https://maven.pkg.github.com/tmdghks2515/made-for-maid.proto-files")
+		credentials {
+			username = project.findProperty("gpr.user")
+			password = project.findProperty("gpr.key")
+		}
+	}
 }
 
 ext {
@@ -44,9 +50,17 @@ ext {
 	set('springCloudVersion', "2024.0.1")
 }
 
+configurations {
+	protoFiles {
+		canBeResolved = true
+		canBeConsumed = false
+	}
+}
+
 dependencies {
 	implementation 'io.madeformaid:shared-lib:0.0.1-SNAPSHOT'
 	implementation 'io.madeformaid:webmvc-lib:0.0.1-SNAPSHOT'
+	protoFiles  'io.madeformaid:proto-files:0.0.1-SNAPSHOT'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
@@ -60,7 +74,6 @@ dependencies {
 	kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
 	kapt("jakarta.annotation:jakarta.annotation-api")
 	kapt("jakarta.persistence:jakarta.persistence-api")
-	kapt "javax.persistence:javax.persistence-api:2.2"
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
@@ -81,24 +94,39 @@ kotlin {
 	}
 }
 
+/* grpc proto 설정부 - START */
+// 📦 proto JAR 추출 경로 설정
+def extractedProtoDir = layout.buildDirectory.dir("proto-extracted").get().asFile
+
+// 📥 proto JAR에서 .proto만 추출
+tasks.register('extractProtoFiles', Copy) {
+	from { configurations.protoFiles.collect { zipTree(it) } }
+	include '**/*.proto'
+	into extractedProtoDir
+}
+
+// 📁 sourceSets에 proto 설정 (generateProto 전에 등록돼야 함)
+sourceSets.main.proto.srcDir extractedProtoDir
+
+// 🧩 의존성 연결
+tasks.named('generateProto') { dependsOn 'extractProtoFiles' }
+tasks.named('processResources') { dependsOn 'extractProtoFiles' }
+
+// ⚙️ protobuf stub 생성 설정
 protobuf {
-	protoc {
-		artifact = 'com.google.protobuf:protoc'
-	}
+	protoc { artifact = "com.google.protobuf:protoc:3.25.2" }
 	plugins {
-		grpc {
-			artifact = 'io.grpc:protoc-gen-grpc-java'
-		}
+		grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.62.2" }
+		grpckt { artifact = "io.grpc:protoc-gen-grpc-kotlin:1.4.1:jdk8@jar" }
 	}
 	generateProtoTasks {
-		all()*.plugins {
-			grpc {
-				option 'jakarta_omit'
-				option '@generated=omit'
-			}
+		all().each { task ->
+			task.builtins { java {}; kotlin {} }
+			task.plugins { grpc {}; grpckt {} }
 		}
 	}
 }
+/* grpc proto 설정부 - END */
 
 allOpen {
 	annotation 'jakarta.persistence.Entity'
@@ -106,8 +134,7 @@ allOpen {
 	annotation 'jakarta.persistence.Embeddable'
 }
 
-// QueryDSL 설정부 - start
-
+// QueryDSL 설정부 - START
 def generated = layout.buildDirectory.dir("generated/source/kapt/main").get().asFile
 
 // Kotlin sourceSet에 QClass 디렉토리 포함 (Gradle 9 호환)
@@ -136,7 +163,7 @@ afterEvaluate {
 		dependsOn(tasks.named("generateProto"))
 	}
 }
-// QueryDSL 설정부 - end
+// QueryDSL 설정부 - END
 
 tasks.named('test') {
 	useJUnitPlatform()
