@@ -23,6 +23,10 @@ class AdminQueryService(
         val results = userRepository.findAdminsByAccountId(accountId)
             .map { adminMapper.toAdminProfileDTO(it) }
 
+        check(results.isNotEmpty()) {
+            "사용 가능한 프로필이 없습니다."
+        }
+
         runCatching {
             results.map { it.shopId }
                 .distinct().takeIf { it.isNotEmpty() }?.let { shopIds ->
