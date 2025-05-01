@@ -124,4 +124,13 @@ class AdminController(
 
         return ResponseEntity.ok().build()
     }
+
+    @PostMapping("/reject/{userId}")
+    fun rejectAdmin(
+        @PathVariable userId: String,
+    ): ResponseEntity<Void> {
+        adminService.rejectAdmin(userId, AuthContext.getUserId())
+
+        return ResponseEntity.ok().build()
+    }
 }

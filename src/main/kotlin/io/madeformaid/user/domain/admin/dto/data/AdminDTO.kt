@@ -3,6 +3,7 @@ package io.madeformaid.user.domain.admin.dto.data
 import io.madeformaid.shared.vo.enums.Role
 import io.madeformaid.user.global.vo.StaffConcept
 import io.madeformaid.user.global.vo.StaffType
+import java.time.LocalDateTime
 
 data class AdminDTO(
         val id: String,
@@ -15,4 +16,5 @@ data class AdminDTO(
         val shopId: String?,
         val staffType: StaffType?,
         val staffConcepts: Set<StaffConcept>?,
+        val approvedAt: LocalDateTime?,
 )

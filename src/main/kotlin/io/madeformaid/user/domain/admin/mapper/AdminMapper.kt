@@ -19,6 +19,7 @@ class AdminMapper {
                     primaryRole = user.primaryRole,
                     staffType = user.staffType,
                     staffConcepts = user.staffConcepts,
+                    approvedAt = user.approvedAt,
             )
 
     fun toAdminProfileDTO(user: UserEntity): AdminProfileDTO =
