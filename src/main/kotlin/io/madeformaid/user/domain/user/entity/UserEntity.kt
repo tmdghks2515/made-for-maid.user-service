@@ -6,10 +6,14 @@ import io.madeformaid.shared.vo.enums.Role
 import io.madeformaid.user.global.vo.StaffConcept
 import io.madeformaid.user.global.vo.StaffType
 import jakarta.persistence.*
+import org.hibernate.annotations.Filter
+import org.hibernate.annotations.FilterDef
 import java.time.LocalDateTime
 
 @Entity
 @Table(name = "users")
+@FilterDef(name = "nonDeletedFilter", defaultCondition = "deleted_at is null")
+@Filter(name = "nonDeletedFilter")
 class UserEntity(
         @Id
         @ShortId
@@ -56,6 +60,9 @@ class UserEntity(
 
         @Column(name = "approved_at")
         var approvedAt: LocalDateTime? = null,
+
+        @Column(name = "deleted_at")
+        val deletedAt: LocalDateTime? = null,
 ) : BaseEntity() {
         protected constructor() : this(
                 nickname = "",

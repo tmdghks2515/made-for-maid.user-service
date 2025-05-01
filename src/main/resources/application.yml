@@ -25,3 +25,4 @@ spring:
         format_sql: true
         show_sql: true
         default_schema: user_db
+        default_batch_fetch_size: 100
