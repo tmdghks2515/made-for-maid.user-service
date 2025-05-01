@@ -55,7 +55,7 @@ class AccountEntity(
         }
 
         fun addShopOwner(admin: UserEntity) {
-                if (users.any { it.shopId == admin.shopId && it.roles.contains(Role.SHOP_OWNER) }) {
+                if (users.any { it.shopId == admin.shopId && it.primaryRole == Role.SHOP_OWNER }) {
                         throw IllegalArgumentException("이미 가입된 사장님 계정이 존재합니다.")
                 }
 
@@ -64,7 +64,7 @@ class AccountEntity(
         }
 
         fun addShopStaff(admin: UserEntity) {
-                if (users.any { it.shopId == admin.shopId && it.roles.contains(Role.SHOP_STAFF)}) {
+                if (users.any { it.shopId == admin.shopId && it.primaryRole == Role.SHOP_STAFF }) {
                         throw IllegalArgumentException("이미 가입된 메이드/집사 계정이 존재합니다.")
                 }
 
@@ -76,7 +76,7 @@ class AccountEntity(
         }
 
         fun addShopManager(admin: UserEntity) {
-                if (users.any { it.shopId == admin.shopId && it.roles.contains(Role.SHOP_MANAGER)}) {
+                if (users.any { it.shopId == admin.shopId && it.primaryRole == Role.SHOP_MANAGER }) {
                         throw IllegalArgumentException("이미 가입된 매니저 계정이 존재합니다.")
                 }
 

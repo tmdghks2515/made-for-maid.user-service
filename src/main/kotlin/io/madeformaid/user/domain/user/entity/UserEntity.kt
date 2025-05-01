@@ -1,19 +1,19 @@
 package io.madeformaid.user.domain.user.entity
 
-import io.madeformaid.webmvc.jpa.entity.BaseEntity
+import io.madeformaid.webmvc.jpa.entity.BaseSoftDeleteEntity
 import io.madeformaid.webmvc.jpa.idGenerator.ShortId
 import io.madeformaid.shared.vo.enums.Role
 import io.madeformaid.user.global.vo.StaffConcept
 import io.madeformaid.user.global.vo.StaffType
 import jakarta.persistence.*
-import org.hibernate.annotations.Filter
-import org.hibernate.annotations.FilterDef
+import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.SQLRestriction
 import java.time.LocalDateTime
 
 @Entity
 @Table(name = "users")
-@FilterDef(name = "nonDeletedFilter", defaultCondition = "deleted_at is null")
-@Filter(name = "nonDeletedFilter")
+@SQLDelete(sql = "UPDATE user_db.users SET deleted_at = current_timestamp WHERE id = ?")
+@SQLRestriction("deleted_at is null")
 class UserEntity(
         @Id
         @ShortId
@@ -60,10 +60,7 @@ class UserEntity(
 
         @Column(name = "approved_at")
         var approvedAt: LocalDateTime? = null,
-
-        @Column(name = "deleted_at")
-        val deletedAt: LocalDateTime? = null,
-) : BaseEntity() {
+) : BaseSoftDeleteEntity() {
         protected constructor() : this(
                 nickname = "",
                 roles = emptySet(),

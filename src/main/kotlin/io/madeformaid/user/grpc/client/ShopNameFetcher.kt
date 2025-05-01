@@ -3,7 +3,6 @@ package io.madeformaid.user.grpc.client
 import affiliation.Shop.GetShopNamesRequest
 import affiliation.Shop.GetShopNamesResponse
 import affiliation.ShopServiceGrpc
-import affiliation.ShopServiceGrpcKt
 import org.springframework.stereotype.Service
 
 @Service
