@@ -2,6 +2,7 @@ package io.madeformaid.user.domain.admin.mapper
 
 import io.madeformaid.user.domain.admin.dto.data.AdminDTO
 import io.madeformaid.user.domain.admin.dto.data.AdminProfileDTO
+import io.madeformaid.user.domain.admin.dto.data.StaffDetailDTO
 import io.madeformaid.user.domain.user.entity.UserEntity
 import org.springframework.stereotype.Component
 
@@ -30,4 +31,15 @@ class AdminMapper {
                     shopId = user.shopId ?: error("Shop ID cannot be null"),
                     staffType = user.staffType,
             )
+
+        fun toStaffDetailDTO(user: UserEntity): StaffDetailDTO =
+                StaffDetailDTO(
+                        userId = user.id ?:error("User ID cannot be null"),
+                        nickname = user.nickname,
+                        profileImageUrl = user.profileImageUrl,
+                        staffType = user.staffType,
+                        staffConcepts = user.staffConcepts,
+                        introduction = user.introduction,
+                        approvedAt = user.approvedAt,
+                )
 }

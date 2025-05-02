@@ -68,3 +68,9 @@ Authorization: Bearer {{accessToken}}
 ### 관리자 승인 처리
 POST {{gatewayUrl}}/api/user/admin/approve/nB7NamXhRN6
 Authorization: Bearer {{accessToken}}
+
+### 메이드/집사 조회
+GET {{gatewayUrl}}/api/user/admin/staff/GFULekdmSEK
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}

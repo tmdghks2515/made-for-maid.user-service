@@ -2,6 +2,7 @@ package io.madeformaid.user.domain.admin.service
 
 import io.madeformaid.user.domain.admin.dto.data.AdminDTO
 import io.madeformaid.user.domain.admin.dto.data.AdminProfileDTO
+import io.madeformaid.user.domain.admin.dto.data.StaffDetailDTO
 import io.madeformaid.user.domain.admin.dto.query.SearchAdminQuery
 import io.madeformaid.user.domain.admin.mapper.AdminMapper
 import io.madeformaid.user.domain.user.repository.UserRepository
@@ -43,5 +44,10 @@ class AdminQueryService(
     fun searchAdmins(query: SearchAdminQuery, pageable: Pageable): Page<AdminDTO> {
         return userRepository.searchAdmins(query, pageable)
             .map { adminMapper.toAdminDTO(it) }
+    }
+
+    fun getStaffDetail(id: String): StaffDetailDTO {
+        val admin = userRepository.findById(id) ?: error("존재하지 않는 메이드/집사 입니다.")
+        return adminMapper.toStaffDetailDTO(admin)
     }
 }

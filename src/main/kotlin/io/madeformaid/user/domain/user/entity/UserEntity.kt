@@ -36,6 +36,9 @@ class UserEntity(
         @Column(name = "staff_type", columnDefinition = "varchar(100)")
         val staffType: StaffType? = null,
 
+        @Column(name = "introduction", length = 300)
+        var introduction: String? = null,
+
         @ElementCollection(fetch = FetchType.LAZY)
         @CollectionTable(
                 name = "staff_concept",

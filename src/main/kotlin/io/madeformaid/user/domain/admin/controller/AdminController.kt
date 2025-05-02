@@ -7,6 +7,7 @@ import io.madeformaid.user.domain.admin.dto.data.AdminDTO
 import io.madeformaid.webmvc.context.AuthContext
 import io.madeformaid.user.domain.admin.dto.data.AdminProfileDTO
 import io.madeformaid.user.domain.admin.dto.data.AdminSignInResDTO
+import io.madeformaid.user.domain.admin.dto.data.StaffDetailDTO
 import io.madeformaid.user.domain.admin.dto.query.SearchAdminQuery
 import io.madeformaid.user.domain.admin.service.AdminQueryService
 import io.madeformaid.user.domain.admin.service.AdminService
@@ -133,4 +134,8 @@ class AdminController(
 
         return ResponseEntity.ok().build()
     }
+
+    @GetMapping("/staff/{id}")
+    fun getStaffDetail(@PathVariable id: String): ResponseEntity<StaffDetailDTO> =
+        adminQueryService.getStaffDetail(id)
 }
