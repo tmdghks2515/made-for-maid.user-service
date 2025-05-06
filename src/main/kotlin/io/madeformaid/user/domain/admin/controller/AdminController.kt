@@ -3,6 +3,9 @@ package io.madeformaid.user.domain.admin.controller
 import io.madeformaid.user.domain.admin.dto.command.CreateAdminCommand
 import io.madeformaid.user.domain.admin.dto.command.CreateStaffCommand
 import io.madeformaid.user.domain.admin.dto.command.CreateSystemAdminCommand
+import io.madeformaid.user.domain.admin.dto.command.UpdateProfileCommand
+import io.madeformaid.user.domain.admin.dto.command.UpdateStaffConceptsCommand
+import io.madeformaid.user.domain.admin.dto.command.UpdateStaffIntroductionCommand
 import io.madeformaid.user.domain.admin.dto.data.AdminDTO
 import io.madeformaid.webmvc.context.AuthContext
 import io.madeformaid.user.domain.admin.dto.data.AdminProfileDTO
@@ -137,5 +140,29 @@ class AdminController(
 
     @GetMapping("/staff/{id}")
     fun getStaffDetail(@PathVariable id: String): ResponseEntity<StaffDetailDTO> =
-        adminQueryService.getStaffDetail(id)
+        ResponseEntity.ok(adminQueryService.getStaffDetail(id))
+
+    @PostMapping("/staff/introduction")
+    fun updateStaffIntroduction(
+        @RequestBody command: UpdateStaffIntroductionCommand,
+    ): ResponseEntity<Void> {
+        adminService.updateStaffIntroduction(command)
+        return ResponseEntity.ok().build()
+    }
+
+    @PostMapping("/staff/concepts")
+    fun updateStaffConcepts(
+        @RequestBody command: UpdateStaffConceptsCommand
+    ): ResponseEntity<Void> {
+        adminService.updateStaffConcepts(command)
+        return ResponseEntity.ok().build()
+    }
+
+    @PostMapping("/profile")
+    fun updateProfile(
+        @RequestBody command: UpdateProfileCommand
+    ): ResponseEntity<Void> {
+        adminService.updateProfile(command)
+        return ResponseEntity.ok().build()
+    }
 }

@@ -5,10 +5,10 @@ import io.madeformaid.user.global.vo.StaffType
 import java.time.LocalDateTime
 
 data class StaffDetailDTO(
-    val id: String,
-    val shopId: String?,
+    val userId: String,
+    val shopId: String,
     val profileImageUrl: String?,
-    val staffType: StaffType?,
+    val staffType: StaffType,
     val staffConcepts: Set<StaffConcept>?,
     val nickname: String,
     val introduction: String?,

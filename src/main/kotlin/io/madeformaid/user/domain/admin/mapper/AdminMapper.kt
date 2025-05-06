@@ -35,9 +35,10 @@ class AdminMapper {
         fun toStaffDetailDTO(user: UserEntity): StaffDetailDTO =
                 StaffDetailDTO(
                         userId = user.id ?:error("User ID cannot be null"),
+                        shopId = user.shopId ?: error("Shop ID cannot be null"),
                         nickname = user.nickname,
                         profileImageUrl = user.profileImageUrl,
-                        staffType = user.staffType,
+                        staffType = user.staffType ?: error("Staff Type cannot be null"),
                         staffConcepts = user.staffConcepts,
                         introduction = user.introduction,
                         approvedAt = user.approvedAt,

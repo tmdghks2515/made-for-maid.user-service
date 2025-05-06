@@ -47,7 +47,8 @@ class AdminQueryService(
     }
 
     fun getStaffDetail(id: String): StaffDetailDTO {
-        val admin = userRepository.findById(id) ?: error("존재하지 않는 메이드/집사 입니다.")
+        val admin = userRepository.findById(id)
+            .orElseThrow { error("존재하지 않는 메이드/집사 입니다.") }
         return adminMapper.toStaffDetailDTO(admin)
     }
 }

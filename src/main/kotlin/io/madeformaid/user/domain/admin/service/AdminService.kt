@@ -4,6 +4,9 @@ import io.madeformaid.shared.vo.enums.Role
 import io.madeformaid.user.domain.admin.dto.command.CreateAdminCommand
 import io.madeformaid.user.domain.admin.dto.command.CreateStaffCommand
 import io.madeformaid.user.domain.admin.dto.command.CreateSystemAdminCommand
+import io.madeformaid.user.domain.admin.dto.command.UpdateProfileCommand
+import io.madeformaid.user.domain.admin.dto.command.UpdateStaffConceptsCommand
+import io.madeformaid.user.domain.admin.dto.command.UpdateStaffIntroductionCommand
 import io.madeformaid.webmvc.context.AuthContext
 import io.madeformaid.webmvc.exception.BusinessException
 import io.madeformaid.webmvc.exception.ErrorCode
@@ -80,7 +83,7 @@ class AdminService(
             roles = setOf(Role.USER, Role.SHOP_STAFF),
             primaryRole = Role.SHOP_STAFF,
             staffType = command.staffType,
-            staffConcepts = command.staffConcepts
+            staffConcepts = command.staffConcepts.toMutableSet()
         )
 
         account.addShopStaff(createdStaff)
@@ -158,5 +161,30 @@ class AdminService(
                 approvedByUser.primaryRole == Role.SHOP_MANAGER) { "승인 거절할 수 있는 권한이 없습니다." }
 
         userRepository.deleteById(userId)
+    }
+
+    fun updateStaffIntroduction(command: UpdateStaffIntroductionCommand) {
+        val admin = userRepository.findById(command.userId)
+            .orElseThrow { BusinessException(ErrorCode.NOT_FOUND) }
+
+        admin.introduction = command.introduction
+        userRepository.save(admin)
+    }
+
+    fun updateStaffConcepts(command: UpdateStaffConceptsCommand) {
+        val admin = userRepository.findById(command.userId)
+            .orElseThrow { BusinessException(ErrorCode.NOT_FOUND) }
+
+        admin.staffConcepts = command.staffConcepts.toMutableSet()
+        userRepository.save(admin)
+    }
+
+    fun updateProfile(command: UpdateProfileCommand) {
+        val admin = userRepository.findById(command.userId)
+            .orElseThrow { BusinessException(ErrorCode.NOT_FOUND) }
+
+        admin.nickname = command.nickname
+        admin.profileImageUrl = command.profileImageUrl
+        userRepository.save(admin)
     }
 }

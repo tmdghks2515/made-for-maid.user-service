@@ -46,7 +46,7 @@ class UserEntity(
         )
         @Enumerated(EnumType.STRING)
         @Column(name = "staff_concept", columnDefinition = "varchar(100)")
-        val staffConcepts: Set<StaffConcept>? = null,
+        var staffConcepts: MutableSet<StaffConcept> = mutableSetOf(),
 
         @ElementCollection(fetch = FetchType.LAZY)
         @CollectionTable(

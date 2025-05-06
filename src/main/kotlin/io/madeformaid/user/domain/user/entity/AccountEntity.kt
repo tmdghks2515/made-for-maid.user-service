@@ -69,7 +69,7 @@ class AccountEntity(
                 }
 
                 requireNotNull(admin.staffType) { "메이드 or 집사를 선택해주세요."}
-                require(admin.staffConcepts?.isNotEmpty() == true) { "컨셉 유형을 최소 하나 이상 선택해주세요."}
+                require(admin.staffConcepts.isNotEmpty() == true) { "컨셉 유형을 최소 하나 이상 선택해주세요."}
 
                 users.add(admin)
                 admin.account = this
