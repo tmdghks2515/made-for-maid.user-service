@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service
 class ShopNameFetcher(
     private val shopServiceStub: ShopServiceGrpc.ShopServiceBlockingStub
 ) {
-    fun fetchShopNames(affiliationIds: List<String>): Map<String, String> {
+    fun fetchShopNames(shopIds: List<String>): Map<String, String> {
         val request = GetShopNamesRequest.newBuilder()
-            .addAllShopIds(affiliationIds)
+            .addAllShopIds(shopIds)
             .build()
 
         val response: GetShopNamesResponse = shopServiceStub.getShopNames(request)

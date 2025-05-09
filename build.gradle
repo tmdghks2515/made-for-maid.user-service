@@ -70,7 +70,9 @@ dependencies {
 	implementation 'org.springframework.grpc:spring-grpc-server-web-spring-boot-starter'
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
 	implementation 'com.auth0:java-jwt:4.4.0'
-	implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+	implementation 'org.springframework.kafka:spring-kafka'
+	implementation 'com.google.protobuf:protobuf-kotlin:3.25.2'
 	kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
 	kapt("jakarta.annotation:jakarta.annotation-api")
 	kapt("jakarta.persistence:jakarta.persistence-api")
