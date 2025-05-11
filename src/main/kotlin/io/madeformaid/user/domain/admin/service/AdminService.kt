@@ -1,5 +1,6 @@
 package io.madeformaid.user.domain.admin.service
 
+import event.ImageEvent
 import io.madeformaid.shared.vo.enums.Role
 import io.madeformaid.user.domain.admin.dto.command.CreateAdminCommand
 import io.madeformaid.user.domain.admin.dto.command.CreateStaffCommand
@@ -15,6 +16,7 @@ import io.madeformaid.user.domain.admin.mapper.AdminMapper
 import io.madeformaid.user.domain.user.entity.UserEntity
 import io.madeformaid.user.domain.user.repository.AccountRepository
 import io.madeformaid.user.domain.user.repository.UserRepository
+import io.madeformaid.user.global.event.publisher.ImageEventPublisher
 import io.madeformaid.user.global.utils.JwtTokenProvider
 import io.madeformaid.user.global.vo.SignInResStatus
 import org.springframework.beans.factory.annotation.Value
@@ -28,6 +30,7 @@ class AdminService(
         private val userRepository: UserRepository,
         private val adminMapper: AdminMapper,
         private val jwtTokenProvider: JwtTokenProvider,
+        private val imageEventPublisher: ImageEventPublisher,
         @Value("\${auth.system-secret}") private val systemSecret: String,
 ) {
     fun selectProfile(userId: String): Pair<AdminSignInResDTO, String> {
@@ -184,7 +187,40 @@ class AdminService(
             .orElseThrow { BusinessException(ErrorCode.NOT_FOUND) }
 
         admin.nickname = command.nickname
-        admin.profileImageUrl = command.profileImageUrl
+
+        val profileImageChanged = admin.profileImageId != command.profileImageId
+        val removedImageId = if (admin.profileImageId != null && profileImageChanged)
+            admin.profileImageId else null
+        val newlyUsingImageId = if (command.profileImageId != null && profileImageChanged)
+            command.profileImageId else null
+
+        if (profileImageChanged) {
+            admin.changeProfileImage(
+                imageId = command.profileImageId,
+                imageUrl = command.profileImageUrl
+            )
+        }
+
         userRepository.save(admin)
+
+        // Publish image unusing event
+        removedImageId?.let {
+            imageEventPublisher.publishImageUnusing(
+                event = ImageEvent.ImageUnusingEvent.newBuilder()
+                    .setImageId(it)
+                    .build()
+                )
+        }
+
+        // Publish image using event
+        newlyUsingImageId?.let {
+            imageEventPublisher.publishImageUsing(
+                event = ImageEvent.ImageUsingEvent.newBuilder()
+                    .setImageId(command.profileImageUrl)
+                    .setUsedByType(ImageEvent.UploadImageType.USER_PROFILE)
+                    .setUsedById(admin.id)
+                    .build()
+            )
+        }
     }
 }

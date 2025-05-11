@@ -29,6 +29,9 @@ class UserEntity(
         @Column(name = "nickname", nullable = false, length = 30)
         var nickname: String,
 
+        @Column(name = "profile_image_id")
+        var profileImageId: String? = null,
+
         @Column(name = "profile_image_url")
         var profileImageUrl: String? = null,
 
@@ -93,5 +96,10 @@ class UserEntity(
                 check(isApprovalRequired()) { "승인이 필요 없는 사용자 프로필 입니다." }
                 check(!isApproved()) { "이미 승인된 사용자 프로필 입니다." }
                 approvedAt = LocalDateTime.now()
+        }
+
+        fun changeProfileImage(imageId: String?, imageUrl: String?) {
+                profileImageId = imageId
+                profileImageUrl = imageUrl
         }
 }

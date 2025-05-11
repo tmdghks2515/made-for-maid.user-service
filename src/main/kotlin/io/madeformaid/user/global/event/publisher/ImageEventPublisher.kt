@@ -7,14 +7,15 @@ import org.springframework.stereotype.Component
 
 @Component
 class ImageEventPublisher(
-    private val imageUsingTemplate: KafkaTemplate<String, ImageUsingEvent>,
-    private val imageUnusingTemplate: KafkaTemplate<String, ImageUnusingEvent>
+    private val kafkaTemplate: KafkaTemplate<String, ByteArray>,
 ) {
     fun publishImageUsing(event: ImageUsingEvent) {
-        imageUsingTemplate.send("image.using", event.imageId, event)
+        kafkaTemplate.send("image-using", event.imageId, event.toByteArray())
+//        kafkaTemplate.send("image.using", event.imageId, event.toByteArray())
     }
 
     fun publishImageUnusing(event: ImageUnusingEvent) {
-        imageUnusingTemplate.send("image.unusing", event.imageId, event)
+        kafkaTemplate.send("image-unusing", event.imageId, event.toByteArray())
+//        kafkaTemplate.send("image.unusing", event.imageId, event.toByteArray())
     }
 }

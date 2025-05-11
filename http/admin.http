@@ -74,3 +74,16 @@ GET {{gatewayUrl}}/api/user/admin/staff/GFULekdmSEK
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
+
+### 프로필 수정
+POST {{gatewayUrl}}/api/user/admin/profile
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "userId": "Vrc7ISk9Rna",
+    "nickname": "올라",
+    "profileImageId": "image_10",
+    "profileImageUrl": "23424234"
+}
