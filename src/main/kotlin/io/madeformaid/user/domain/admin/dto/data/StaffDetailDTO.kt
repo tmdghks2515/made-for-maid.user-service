@@ -7,6 +7,7 @@ import java.time.LocalDateTime
 data class StaffDetailDTO(
     val userId: String,
     val shopId: String,
+    val profileImageId: String?,
     val profileImageUrl: String?,
     val staffType: StaffType,
     val staffConcepts: Set<StaffConcept>?,

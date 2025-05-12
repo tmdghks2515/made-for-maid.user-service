@@ -12,6 +12,7 @@ data class AdminDTO(
         val nickname: String,
         val roles: Set<Role>,
         val primaryRole: Role,
+        val profileImageId: String?,
         val profileImageUrl: String?,
         val shopId: String?,
         val staffType: StaffType?,
