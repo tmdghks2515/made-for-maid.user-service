@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -120,7 +121,7 @@ class AdminController(
         return ResponseEntity.ok(adminQueryService.searchAdmins(shopIdSettedQuery, pageable))
     }
 
-    @PostMapping("/approve/{userId}")
+    @PutMapping("/approve/{userId}")
     fun approveAdmin(
         @PathVariable userId: String,
     ): ResponseEntity<Void> {
@@ -129,7 +130,7 @@ class AdminController(
         return ResponseEntity.ok().build()
     }
 
-    @PostMapping("/reject/{userId}")
+    @PutMapping("/reject/{userId}")
     fun rejectAdmin(
         @PathVariable userId: String,
     ): ResponseEntity<Void> {
@@ -142,7 +143,7 @@ class AdminController(
     fun getStaffDetail(@PathVariable id: String): ResponseEntity<StaffDetailDTO> =
         ResponseEntity.ok(adminQueryService.getStaffDetail(id))
 
-    @PostMapping("/staff/introduction")
+    @PutMapping("/staff/introduction")
     fun updateStaffIntroduction(
         @RequestBody command: UpdateStaffIntroductionCommand,
     ): ResponseEntity<Void> {
@@ -150,7 +151,7 @@ class AdminController(
         return ResponseEntity.ok().build()
     }
 
-    @PostMapping("/staff/concepts")
+    @PutMapping("/staff/concepts")
     fun updateStaffConcepts(
         @RequestBody command: UpdateStaffConceptsCommand
     ): ResponseEntity<Void> {
@@ -158,7 +159,7 @@ class AdminController(
         return ResponseEntity.ok().build()
     }
 
-    @PostMapping("/profile")
+    @PutMapping("/profile")
     fun updateProfile(
         @RequestBody command: UpdateProfileCommand
     ): ResponseEntity<Void> {
